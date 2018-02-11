@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-2-5 18:28:42 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.DMS.ghb.entity.Students" table="STUDENTS">
+        <id name="stuId" type="java.lang.String">
+            <column name="STUID" />
+            <generator class="uuid" />
+        </id>
+        <property name="stuNum" type="long">
+            <column name="STUNUM" />
+        </property>
+        <property name="name" type="java.lang.String">
+            <column name="NAME" />
+        </property>
+        <property name="years" type="java.lang.String">
+            <column name="YEARS" />
+        </property>
+        <one-to-one name="papers" class="com.DMS.ghb.entity.Papers"></one-to-one>
+        <one-to-one name="company" class="com.DMS.ghb.entity.Company"></one-to-one>
+        <property name="departments" type="java.lang.String">
+            <column name="DEPARTMENTS" />
+        </property>
+        <property name="major" type="java.lang.String">
+            <column name="MAJOR" />
+        </property>
+        <property name="classes" type="java.lang.String">
+            <column name="CLASSES" />
+        </property>
+        <many-to-one name="teachers" class="com.DMS.ghb.entity.Teachers" fetch="join">
+            <column name="TEAID" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

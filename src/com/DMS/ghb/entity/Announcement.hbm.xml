@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-2-5 18:28:42 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.DMS.ghb.entity.Announcement" table="ANNOUNCEMENT">
+        <id name="annId" type="java.lang.String">
+            <column name="ANNID" />
+            <generator class="uuid" />
+        </id>
+        <property name="head" type="java.lang.String">
+            <column name="HEAD" />
+        </property>
+        <property name="body" type="java.lang.String">
+            <column name="BODY" />
+        </property>
+        <property name="time" type="java.lang.String">
+            <column name="TIME" />
+        </property>
+        <many-to-one name="teaId" class="com.DMS.ghb.entity.Teachers" fetch="join">
+            <column name="TEAID" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

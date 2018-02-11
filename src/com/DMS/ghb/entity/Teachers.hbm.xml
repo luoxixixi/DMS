@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-2-5 18:28:42 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.DMS.ghb.entity.Teachers" table="TEACHERS">
+        <id name="teaId" type="java.lang.String">
+            <column name="TEAID" />
+            <generator class="uuid" />
+        </id>
+        <property name="name" type="java.lang.String">
+            <column name="NAME" />
+        </property>
+        <property name="phone" type="java.lang.String">
+            <column name="PHONE" />
+        </property>
+        <property name="teaInfo" type="java.lang.String">
+            <column name="TEAINFO" />
+        </property>
+        <property name="major" type="java.lang.String">
+            <column name="MAJOR" />
+        </property>
+        <set name="students" table="STUDENTS" inverse="false" lazy="true">
+            <key>
+                <column name="TEAID" />
+            </key>
+            <one-to-many class="com.DMS.ghb.entity.Students" />
+        </set>
+        <set name="announcements" table="ANNOUNCEMENT" inverse="false" lazy="true">
+            <key>
+                <column name="TEAID" />
+            </key>
+            <one-to-many class="com.DMS.ghb.entity.Announcement" />
+        </set>
+    </class>
+</hibernate-mapping>

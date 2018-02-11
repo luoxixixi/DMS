@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+	<constant name="struts.multipart.maxSize" value="10737418240" />
+	<package name="DMS" extends="struts-default">
+		<global-results>
+			<result name="input">/WEB-INF/500.html</result>
+			<result name="error">/WEB-INF/500.html</result>
+		</global-results>
+
+		<!--用户登录 -->
+		<action name="login" class="userAction" method="login">
+			<result name="STUDENT">s.jsp</result>
+			<result name="TEACHER">s.jsp</result>
+			<result name="DIRECTOR">s.jsp</result>
+			<result name="MANAGE">s.jsp</result>
+			<result name="none">s.jsp</result>
+		</action>
+		<action name="importStu" class="documentAction" method="importStu">
+			<result name="success"></result>
+		</action>
+		<action name="changePassword" class="userAction" method="changePassword">
+			<result name="success"></result>
+		</action>
+		<action name="changeStuInfo" class="userAction" method="changeStuInfo">
+			<result name="success"></result>
+		</action>
+		<action name="changeTeaInfo" class="userAction" method="changeTeaInfo">
+			<result name="success"></result>
+		</action>
+		<action name="saveTeacher" class="userAction" method="saveTeacher">
+			<result name="success"></result>
+		</action>
+		<action name="saveStu" class="userAction" method="saveStu">
+			<result name="success"></result>
+		</action>
+		<action name="deleteTea" class="userAction" method="deleteTea">
+			<result name="success"></result>
+		</action>
+		<action name="deleteStu" class="userAction" method="deleteStu">
+			<result name="success"></result>
+		</action>
+		<action name="choiceTeacher" class="userAction" method="choiceTeacher">
+			<result name="success"></result>
+		</action>
+		<action name="choiceStu" class="userAction" method="choiceStu">
+			<result name="success"></result>
+		</action>
+		<action name="showAllAnn" class="announcementAction" method="showAllAnn">
+			<result name="success"></result>
+		</action>
+		<action name="showAnn" class="announcementAction" method="showAnn">
+			<result name="success"></result>
+		</action>
+		<action name="saveAnn" class="announcementAction" method="saveAnn">
+			<result name="success"></result>
+		</action>
+		<action name="deleteAnn" class="announcementAction" method="deleteAnn">
+			<result name="success"></result>
+		</action>
+		<action name="showAnnByUser" class="announcementAction" method="showAnnByUser">
+			<result name="success"></result>
+		</action>
+		<action name="showAllCls" class="classesAction" method="showAllCls">
+			<result name="success"></result>
+		</action>
+		<action name="saveCls" class="classesAction" method="saveCls">
+			<result name="success"></result>
+		</action>
+		<action name="deleteCls" class="classesAction" method="deleteCls">
+			<result name="success"></result>
+		</action>
+		<action name="saveCom" class="companyAction" method="saveCom">
+			<result name="success"></result>
+		</action>
+		<action name="changeCom" class="companyAction" method="changeCom">
+			<result name="success"></result>
+		</action>
+		<action name="deleteCom" class="companyAction" method="deleteCom">
+			<result name="success"></result>
+		</action>
+		<action name="exceptCom" class="companyAction" method="except">
+			<result name="success"></result>
+		</action>
+		<action name="savedept" class="departmentAction" method="savedept">
+			<result name="success"></result>
+		</action>
+		<action name="deletedept" class="departmentAction" method="deletedept">
+			<result name="success"></result>
+		</action>
+		<action name="getdept" class="departmentAction" method="getdept">
+			<result name="success"></result>
+		</action>
+		<action name="upFile" class="documentAction" method="fileUpload">
+			<result name="success"></result>
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">1073741824</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+		</action>
+		<action name="getAllFile" class="documentAction" method="getAllFile">
+			<result name="success"></result>
+		</action>
+		<action name="getFileByName" class="documentAction" method="getFileByName">
+			<result name="success"></result>
+		</action>
+		<action name="downLoadFile" class="documentAction" method="downLoadFile">
+			 <result name="success" type="stream">  
+               <param name="contentType">application/octet_stream</param>  
+               <param name="contentDisposition">attachment;fileName="${fileFileName}"</param>  
+               <param name="inputName">fileInputStream</param>  
+               <param name="bufferSize">1024</param>  
+           </result>  
+		</action>
+		<action name="downZipFile" class="documentAction" method="downZipFile">
+			<result name="success"></result>
+		</action>
+		<action name="savemajor" class="majorAction" method="savemajor">
+			<result name="success"></result>
+		</action>
+		<action name="deletema" class="majorAction" method="deletema">
+			<result name="success"></result>
+		</action>
+		<action name="getAll" class="majorAction" method="getAll">
+			<result name="success"></result>
+		</action>
+		<action name="savepaper" class="papersAction" method="savepaper">
+			<result name="success"></result>
+		</action>
+		<action name="getAllpaper" class="papersAction" method="getAllpaper">
+			<result name="success"></result>
+		</action>
+		<action name="deletepaper" class="papersAction" method="deletepaper">
+			<result name="success"></result>
+		</action>
+		<action name="updatePaper" class="papersAction" method="papersAction">
+			<result name="success"></result>
+		</action>
+		<action name="exportPaper" class="papersAction" method="export">
+			<result name="success"></result>
+		</action>
+	</package>
+
+</struts>

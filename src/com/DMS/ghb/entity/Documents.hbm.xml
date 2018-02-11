@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-2-5 18:28:42 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.DMS.ghb.entity.Documents" table="DOCUMENTS">
+        <id name="docId" type="java.lang.String">
+            <column name="DOCID" />
+            <generator class="uuid" />
+        </id>
+        <property name="fileName" type="java.lang.String">
+            <column name="FILENAME" />
+        </property>
+        <property name="fileSize" type="java.lang.String">
+            <column name="FILESIZE" />
+        </property>
+        <property name="upTime" type="java.lang.String">
+            <column name="UPTIME" />
+        </property>
+        <property name="fileContentType" type="java.lang.String">
+            <column name="FILECONTENTTYPE" />
+        </property>
+        <property name="fileType" type="java.lang.String">
+            <column name="FILETYPE" />
+        </property>
+        <property name="fileStatus" type="java.lang.String">
+            <column name="FILESTATUS" />
+        </property>
+        <many-to-one name="userId" class="com.DMS.ghb.entity.Users" fetch="join">
+            <column name="USERID" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>
