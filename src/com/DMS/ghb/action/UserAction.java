@@ -1,9 +1,9 @@
 package com.DMS.ghb.action;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
@@ -67,8 +67,6 @@ public class UserAction extends ActionSupport {
 		}
 	}
 
-	
-
 	/**
 	 * 修改密码
 	 * 
@@ -77,8 +75,8 @@ public class UserAction extends ActionSupport {
 	 */
 	public String changePassword() throws Exception {
 		System.out.println("进入方法");
-		Teachers teachers =teacherService.getTeacherByPhone("13888888888");
-	 Set<Students> students = teachers.getStudents();
+		Teachers teachers = teacherService.getTeacherByPhone("13888888888");
+		Set<Students> students = teachers.getStudents();
 		for (Students students2 : students) {
 			System.out.println(students2.getName());
 		}
@@ -117,8 +115,18 @@ public class UserAction extends ActionSupport {
 	 */
 	public String saveTeacher() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
+		String name = requset.getParameter("teacherName");
+		String phone = requset.getParameter("teacherPhone");
+		Teachers teachers = new Teachers();
+		teachers.setName(name);
+		teachers.setPhone(phone);
+		boolean saveTeachers = teacherService.saveTeachers(teachers);
+		if(saveTeachers){
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.getWriter().print("success");
+			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -165,8 +173,9 @@ public class UserAction extends ActionSupport {
 	 */
 	public String choiceTeacher() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		Students student = (Students) HttpUtil.getSession().getAttribute("user");
-		Teachers teachers =teacherService.getTeacherByPhone("13888888888");
+		Students student = (Students) HttpUtil.getSession()
+				.getAttribute("user");
+		Teachers teachers = teacherService.getTeacherByPhone("13888888888");
 		student.setTeachers(teachers);
 		studentService.updataStudents(student);
 		return SUCCESS;

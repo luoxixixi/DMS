@@ -7,3 +7,11 @@ $(function(){
         return false;
     });
 });
+
+$("#exit").click(function(){
+ layer.confirm('是否删除？', {
+ 	icon: 3,
+  btn: ['是','否'] //按钮
+}, function(){
+} );
+});
