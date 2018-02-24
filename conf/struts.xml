@@ -17,7 +17,7 @@
 			<result name="TEACHER">s.jsp</result>
 			<result name="DIRECTOR">s.jsp</result>
 			<result name="MANAGE">s.jsp</result>
-			<result name="none">s.jsp</result>
+			<result name="none">/</result>
 		</action>
 		<action name="importStu" class="documentAction" method="importStu">
 			<result name="success"></result>

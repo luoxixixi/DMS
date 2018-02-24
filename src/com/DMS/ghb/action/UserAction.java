@@ -33,7 +33,6 @@ public class UserAction extends ActionSupport {
 		String psw = ServletActionContext.getRequest().getParameter("psw");
 		HttpSession session = ServletActionContext.getRequest().getSession();
 		name = new String(name.getBytes("ISO8859-1"), "UTF-8");
-		System.out.println(psw + "-------" + name);
 		Users user = service.getUserByName(name, psw);
 		if (user != null) {
 			session.setAttribute("suser", user);
