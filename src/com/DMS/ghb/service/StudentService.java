@@ -14,4 +14,6 @@ public interface StudentService {
 	public boolean deleteStudents(Students students);
 	
 	public List<Students> getAllStu();
+	
+	public Students getStuById(String id);
 }

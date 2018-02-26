@@ -10,5 +10,6 @@ public interface StudentDao {
 	public boolean deleteStu(Students students);
 	public Students getStudentsByNum(long num);
 	public List<Students> getAllStu();
+	public Students getStuById(String id);
     
 }

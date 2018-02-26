@@ -25,8 +25,8 @@ public class Test {
 //		PapersDaoImpl dao8 =(PapersDaoImpl) factory.getBean("papersDaoImpl");
 		Users users = new Users();
 		users.setUserId(UUID.randomUUID().toString());
-		users.setUserName("13888888888");
-		users.setType("2");
+		users.setUserName("111");
+		users.setType("3");
 		users.setUserPsw("1");
 		dao2.saveUser(users);
 //		Students students = new Students();

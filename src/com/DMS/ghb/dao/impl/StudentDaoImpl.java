@@ -74,4 +74,15 @@ public class StudentDaoImpl extends HibernateDaoSupport implements StudentDao {
 		return null;
 	}
 
+	@Override
+	public Students getStuById(String id) {
+		try {
+			Students students = getHibernateTemplate().get(Students.class, id);
+			return students;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

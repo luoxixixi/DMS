@@ -45,4 +45,9 @@ public class StudentServiceImpl implements StudentService{
 		return dao.getAllStu();
 	}
 
+	@Override
+	public Students getStuById(String id) {
+		return dao.getStuById(id);
+	}
+
 }

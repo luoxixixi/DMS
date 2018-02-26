@@ -84,6 +84,7 @@ public class UserAction extends ActionSupport {
 		}
 		return SUCCESS;
 	}
+	
 	/**
 	 * ÐÞ¸ÄÃÜÂë
 	 * 
@@ -108,8 +109,28 @@ public class UserAction extends ActionSupport {
 	 */
 	public String changeStuInfo() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
+		String stuid = requset.getParameter("stuId");
+		String stuname = requset.getParameter("stuname");
+		String stunum = requset.getParameter("stunum");
+		String studept = requset.getParameter("studept");
+		String stumajor = requset.getParameter("stumajor");
+		String stucls = requset.getParameter("stucls");
+		
+		Students students = studentService.getStuById(stuid);
+		Users user = service.getUserByName(students.getStuNum()+"");
+		students.setName(stuname);
+		students.setStuNum(OtherUtils.getLong(stunum));
+		students.setDepartments(studept);
+		students.setMajor(stumajor);
+		students.setClasses(stucls);
+		user.setUserName(stunum);
+		boolean updataStudents = studentService.updataStudents(students);
+		boolean updataUsers = service.updataUsers(user);
+		if(updataStudents&&updataUsers){
+			HttpUtil.getResponse().getWriter().print("success");
+			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -198,9 +219,13 @@ public class UserAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String deleteStu() throws Exception {
-		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
+		String stuId = HttpUtil.getRequset().getParameter("stuId");
+		Students students = studentService.getStuById(stuId);
+		boolean deleteStudents = studentService.deleteStudents(students);
+		if(deleteStudents){
+			HttpUtil.getResponse().getWriter().print("success");
+		}
+		return null;
 	}
 
 	/**
