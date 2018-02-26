@@ -22,6 +22,9 @@
 		<action name="importStu" class="documentAction" method="importStu">
 			<result name="success"></result>
 		</action>
+		<action name="getAllStu" class="userAction" method="getAllstudent">
+			<result name="success">/student_info_tables.jsp</result>
+		</action>
 		<action name="changePassword" class="userAction" method="changePassword">
 			<result name="success"></result>
 		</action>
@@ -32,7 +35,7 @@
 			<result name="success"></result>
 		</action>
 		<action name="saveTeacher" class="userAction" method="saveTeacher">
-			<result name="success" type="redirect">/teacher_info_tables.html</result>
+			<result name="success" type="redirect"></result>
 		</action>
 		<action name="saveStu" class="userAction" method="saveStu">
 			<result name="success"></result>
@@ -108,12 +111,12 @@
 			<result name="success"></result>
 		</action>
 		<action name="downLoadFile" class="documentAction" method="downLoadFile">
-			 <result name="success" type="stream">  
-               <param name="contentType">application/octet_stream</param>  
-               <param name="contentDisposition">attachment;fileName="${fileFileName}"</param>  
-               <param name="inputName">fileInputStream</param>  
-               <param name="bufferSize">1024</param>  
-           </result>  
+			<result name="success" type="stream">
+				<param name="contentType">application/octet_stream</param>
+				<param name="contentDisposition">attachment;fileName="${fileFileName}"</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">1024</param>
+			</result>
 		</action>
 		<action name="downZipFile" class="documentAction" method="downZipFile">
 			<result name="success"></result>

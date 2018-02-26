@@ -26,10 +26,10 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>文件上传</h5>
+                        <h5>导入学生信息</h5>
                     </div>
                     <div class="ibox-content">
-                        <form id="my-awesome-dropzone" class="dropzone" action="upFile" method="post" >
+                        <form id="my-awesome-dropzone" class="dropzone" action="importStu" method="post" >
                             <div class="dropzone-previews"></div>
                             <button type="submit" class="btn btn-primary pull-right">导入</button>
                         </form>
@@ -79,7 +79,7 @@
                     });
                     
                     this.on("complete", function (file) {
-                    	 window.location.href="getFileAll.action";
+                    	 window.location.href="student_info_tables.html";
                     });
                 }
 

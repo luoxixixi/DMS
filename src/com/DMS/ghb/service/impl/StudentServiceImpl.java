@@ -40,4 +40,9 @@ public class StudentServiceImpl implements StudentService{
 		return deleteStu;
 	}
 
+	@Override
+	public List<Students> getAllStu() {
+		return dao.getAllStu();
+	}
+
 }

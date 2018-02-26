@@ -59,4 +59,19 @@ public class StudentDaoImpl extends HibernateDaoSupport implements StudentDao {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Students> getAllStu() {
+		try {
+			String hql = "from Students";
+			List<Students> students = (List<Students>) getHibernateTemplate()
+					.find(hql);
+			return students;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

@@ -12,4 +12,6 @@ public interface StudentService {
 	public boolean updataStudents(Students students);
 
 	public boolean deleteStudents(Students students);
+	
+	public List<Students> getAllStu();
 }

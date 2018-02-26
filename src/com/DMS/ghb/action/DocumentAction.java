@@ -70,7 +70,6 @@ public class DocumentAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String importStu() throws Exception {
-		System.out.println(fileFileName);
 		FileInputStream is = new FileInputStream(file);
 		PoiTest test = new PoiTest(fileFileName, is);
 		Map<Integer, Map<Integer, Object>> readExcelContent = test.readExcelContent();
@@ -95,7 +94,6 @@ public class DocumentAction extends ActionSupport {
 			students.setClasses(cls);
 			studentService.saveStudent(students);
 		}
-		System.out.println(readExcelContent);
 		return SUCCESS;
 	}
 	/**

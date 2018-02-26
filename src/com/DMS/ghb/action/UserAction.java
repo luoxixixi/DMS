@@ -1,5 +1,7 @@
 package com.DMS.ghb.action;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.tomcat.jni.User;
 
 import com.DMS.ghb.entity.Students;
 import com.DMS.ghb.entity.Teachers;
@@ -15,6 +18,7 @@ import com.DMS.ghb.service.StudentService;
 import com.DMS.ghb.service.TeacherService;
 import com.DMS.ghb.service.UserService;
 import com.DMS.ghb.util.HttpUtil;
+import com.DMS.ghb.util.OtherUtils;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserAction extends ActionSupport {
@@ -61,12 +65,25 @@ public class UserAction extends ActionSupport {
 			}
 		} else {
 			this.clearErrorsAndMessages();
-			System.out.println("2");
 			addActionMessage("请检查用户名或密码是否正确！");
 			return NONE;
 		}
 	}
-
+	/**
+	 * 查询所有学生
+	 * @return
+	 * @throws Exception
+	 */
+	public String getAllstudent() throws Exception{
+		List<Students> allStu = studentService.getAllStu();
+		if(allStu!=null&&allStu.size()>0){
+			HttpUtil.getRequset().setAttribute("allstudent", allStu);
+		}else {
+			HttpUtil.getRequset().setAttribute("allstudent", allStu);
+			allStu = new ArrayList<Students>();
+		}
+		return SUCCESS;
+	}
 	/**
 	 * 修改密码
 	 * 
@@ -137,8 +154,29 @@ public class UserAction extends ActionSupport {
 	 */
 	public String saveStu() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
+		String stuname = requset.getParameter("stuname");
+		String stunum = requset.getParameter("stunum");
+		String studept = requset.getParameter("studept");
+		String stumajor = requset.getParameter("stumajor");
+		String stucls = requset.getParameter("stucls");
+		Students students = new Students();
+		students.setName(stuname);
+		students.setStuNum(OtherUtils.getLong(stunum));
+		students.setDepartments(studept);
+		students.setMajor(stumajor);
+		students.setClasses(stucls);
+		Users users = new Users();
+		users.setUserName(stunum);
+		users.setUserPsw(stunum);
+		users.setType("1");
+		boolean saveStudent = studentService.saveStudent(students);
+		boolean saveUser = service.saveUser(users);
+		if(saveStudent&&saveUser){
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.getWriter().print("success");
+			return null;
+		}
+		return null;
 	}
 
 	/**
