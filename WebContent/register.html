@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - 注册</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <div>
+            </div>
+            <h3>欢迎注册 </h3>
+            <div class="m-t" role="form">
+                <div class="form-group">
+                    <input type="text" id="teaName" class="form-control" placeholder="请输入姓名" required="">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="teaPhone" class="form-control" placeholder="手机号码" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="psw1" class="form-control" placeholder="请输入密码" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="psw2" class="form-control" placeholder="请再次输入密码" required="">
+                </div>
+                <div class="form-group text-left">
+                    <div class="checkbox i-checks">
+                        <label class="no-padding">
+                    </div>
+                </div>
+                <button class="btn btn-primary block full-width m-b" onclick="register()">注 册</button>
+
+                <p class="text-muted text-center"><small>已经有账户了？</small><a href="login.html">点此登录</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="js/plugins/layer/layer.min.js"></script>
+    <!-- iCheck -->
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+        function register(){
+        	var name =$("#teaName").val();
+        	if(name==""){
+        		layer.msg('请输入姓名', {
+					time: 1000,
+					icon: 7,
+					anim: 6});
+				return;
+        	}
+        	var phone =$("#teaPhone").val();
+        	
+        	var reg = /^1[0-9]{10}$/;
+			var b = reg.test(phone);
+			if(!b){
+				layer.msg('请正确填入手机号码', {
+					time: 1000,
+					icon: 7,
+					anim: 6});
+				return;
+			}
+        	var psw1=$("#psw1").val();
+        	var psw2=$("#psw2").val();
+        	if(psw1==""||psw2==""){
+        		layer.msg('请输入密码', {
+					time: 1000,
+					icon: 7,
+					anim: 6});
+        		return;
+        	}
+        	if(psw1!=psw2){
+        		layer.msg('密码输入不一致', {
+					time: 1000,
+					icon: 7,
+					anim: 6});
+				return;
+        	}
+        	
+        	$.ajax({
+				type : "post",
+				url : "/dms/saveTeacher",
+				data : {
+					teacherName : name,
+					teacherPhone : phone,
+					psw2 : psw2,
+				},
+				success : function(data, textStatus) {
+					if(data=='success'){
+						layer.msg('注册成功，2秒后跳转到登录页', {
+							time: 2000,
+							icon: 1,
+							end: function(index, layero){
+							window.location.href="login.jsp";
+							}
+							});
+					}else if(data=='1'){
+						layer.msg('该手机号已注册', {
+							time: 1000,
+							icon: 7,
+							anim: 6});
+					}else{
+						layer.msg('服务器错误', {
+							time: 1000,
+							icon: 7,
+							anim: 6});
+					}
+					/*  */
+				}
+			})
+        	
+        }
+    </script>
+
+    
+    
+
+</body>
+
+</html>

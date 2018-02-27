@@ -87,4 +87,15 @@ public class TeacherDaoImpl extends HibernateDaoSupport implements TeacherDao {
 		return null;
 	}
 
+	@Override
+	public Teachers getTeacerById(String id) {
+		try {
+			Teachers teachers = getHibernateTemplate().get(Teachers.class, id);
+			return teachers;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

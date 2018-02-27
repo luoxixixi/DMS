@@ -30,8 +30,9 @@
 								<label class="col-sm-2 control-label">姓名</label>
 
 								<div class="col-sm-8">
-									<input type="text" id="name" name="teacherName"
-										placeholder="请输入姓名" class="form-control" required="required">
+									<input id="tId" hidden=""> <input type="text" id="name"
+										name="teacherName" placeholder="请输入姓名" class="form-control"
+										required="required">
 								</div>
 
 							</div>
@@ -45,8 +46,7 @@
 							</div>
 							<div class="form-group">
 								<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
-									style="position: relative; left: -390px;"
-									onclick="saveteacher()">
+									style="position: relative; left: -390px;" onclick="upteacher()">
 									<strong>保存</strong>
 								</button>
 							</div>
@@ -80,26 +80,66 @@
 				radioClass : 'iradio_square-green',
 			});
 		});
-
-		function saveteacher() {
+		function initdata(id, name, phone) {
+			$("#tId").val(id);
+			$("#name").val(name);
+			$("#phone").val(phone);
+		}
+		function upteacher() {
+			var id = $("#tId").val()
 			var name = $("#name").val();
+			if (name == "") {
+				layer.msg('请输入姓名', {
+					time : 1000,
+					icon : 7,
+					anim : 6
+				});
+				return;
+			}
 			var phone = $("#phone").val();
+			var reg = /^1[0-9]{10}$/;
+			var b = reg.test(phone);
+			if (!b) {
+				layer.msg('请正确填入手机号码', {
+					time : 1000,
+					icon : 7,
+					anim : 6
+				});
+				return;
+			}
 			$.ajax({
 				type : "post",
-				url : "/dms/saveTeacher",
+				url : "/dms/changeTeaInfo",
 				data : {
+					teacherId : id,
 					teacherName : name,
 					teacherPhone : phone
 				},
 				success : function(data, textStatus) {
-					layer.msg('添加成功', {
-						time: 1000,
-						icon: 1,
-						end: function(index, layero){
-						var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-						parent.layer.close(index); //再执行关闭   
-						}
+					if (data == 'success') {
+						layer.msg('修改成功', {
+							time : 1000,
+							icon : 1,
+							end : function(index, layero) {
+								var index = parent.layer
+										.getFrameIndex(window.name); //先得到当前iframe层的索引
+								window.parent.location.reload();
+								parent.layer.close(index); //再执行关闭   
+							}
 						});
+					} else if (data == '1') {
+						layer.msg('该手机号已注册', {
+							time : 1000,
+							icon : 7,
+							anim : 6
+						});
+					} else {
+						layer.msg('服务器错误', {
+							time : 1000,
+							icon : 7,
+							anim : 6
+						});
+					}
 				}
 			})
 		}

@@ -48,4 +48,9 @@ public class TeacherServiceImpl implements TeacherService {
 		boolean deleteTeacher = dao.deleteTeacher(teachers);
 		return deleteTeacher;
 	}
+
+	@Override
+	public Teachers getTeacerById(String id) {
+		return dao.getTeacerById(id);
+	}
 }

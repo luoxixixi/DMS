@@ -26,6 +26,10 @@
 			<result name="success">/student_info_tables.jsp</result>
 		</action>
 		
+		<action name="getAllTeacher" class="userAction" method="getAllTeacher">
+			<result name="success">/teacher_info_tables.jsp</result>
+		</action>
+		
 		<action name="changePassword" class="userAction" method="changePassword">
 			<result name="success"></result>
 		</action>

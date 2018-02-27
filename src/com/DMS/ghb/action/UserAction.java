@@ -79,12 +79,26 @@ public class UserAction extends ActionSupport {
 		if(allStu!=null&&allStu.size()>0){
 			HttpUtil.getRequset().setAttribute("allstudent", allStu);
 		}else {
-			HttpUtil.getRequset().setAttribute("allstudent", allStu);
 			allStu = new ArrayList<Students>();
+			HttpUtil.getRequset().setAttribute("allstudent", allStu);
 		}
 		return SUCCESS;
 	}
-	
+	/**
+	 * 查询所有教师
+	 * @return
+	 * @throws Exception
+	 */
+	public String getAllTeacher() throws Exception{
+		List<Teachers> teachers = teacherService.getTeachers();
+		if(teachers!=null&&teachers.size()>0){
+			HttpUtil.getRequset().setAttribute("allteacher", teachers);
+		}else {
+			teachers = new ArrayList<Teachers>();
+			HttpUtil.getRequset().setAttribute("allteacher", teachers);
+		}
+		return SUCCESS;
+	}
 	/**
 	 * 修改密码
 	 * 
@@ -141,8 +155,29 @@ public class UserAction extends ActionSupport {
 	 */
 	public String changeTeaInfo() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
+		String id = requset.getParameter("teacherId");
+		String name = requset.getParameter("teacherName");
+		String phone = requset.getParameter("teacherPhone");
+		Teachers teacherByPhone = teacherService.getTeacherByPhone(phone);
+		Teachers teacerById = teacherService.getTeacerById(id);
+		HttpServletResponse response = ServletActionContext.getResponse();
+		if (teacherByPhone!=null) {
+			if(!(teacherByPhone.getPhone().equals(teacerById.getPhone()))){
+			response.getWriter().print("1");
+			return null;
+			}
+		}
+		Users userByName = service.getUserByName(teacerById.getPhone());
+		teacerById.setName(name);
+		teacerById.setPhone(phone);
+		userByName.setUserName(phone);
+		boolean updataUsers = service.updataUsers(userByName);
+		boolean updataTeachers = teacherService.updataTeachers(teacerById);
+		if (updataTeachers&&updataUsers) {
+			response.getWriter().print("success");
+			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -155,12 +190,29 @@ public class UserAction extends ActionSupport {
 		HttpServletRequest requset = HttpUtil.getRequset();
 		String name = requset.getParameter("teacherName");
 		String phone = requset.getParameter("teacherPhone");
+		String psw = requset.getParameter("psw2");
+		
 		Teachers teachers = new Teachers();
 		teachers.setName(name);
 		teachers.setPhone(phone);
+		
+		if(psw==null||psw.equals("")){
+			psw="111";
+		}
+		Users users = new Users();
+		users.setUserName(phone);
+		users.setUserPsw(psw);
+		users.setType("2");
+		HttpServletResponse response = ServletActionContext.getResponse();
+		Teachers teacherByPhone = teacherService.getTeacherByPhone(phone);
+		if(teacherByPhone!=null){
+			response.getWriter().print("1");
+			return null;
+		}
+		
+		boolean saveUser = service.saveUser(users);
 		boolean saveTeachers = teacherService.saveTeachers(teachers);
-		if(saveTeachers){
-			HttpServletResponse response = ServletActionContext.getResponse();
+		if(saveTeachers&&saveUser){
 			response.getWriter().print("success");
 			return null;
 		}
@@ -208,8 +260,16 @@ public class UserAction extends ActionSupport {
 	 */
 	public String deleteTea() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
+		String teaId = requset.getParameter("teaId");
+		Teachers teacerById = teacherService.getTeacerById(teaId);
+		Users userByName = service.getUserByName(teacerById.getPhone());
+		System.out.println(userByName.getUserId());
+		boolean deleteTeachers = teacherService.deleteTeachers(teacerById);
+		boolean deleteUsers = service.deleteUsers(userByName);
+		if (deleteTeachers&&deleteUsers) {
+			HttpUtil.getResponse().getWriter().print("success");
+		}
+		return null;
 	}
 
 	/**
@@ -222,7 +282,9 @@ public class UserAction extends ActionSupport {
 		String stuId = HttpUtil.getRequset().getParameter("stuId");
 		Students students = studentService.getStuById(stuId);
 		boolean deleteStudents = studentService.deleteStudents(students);
-		if(deleteStudents){
+		Users userByName = service.getUserByName(students.getStuNum()+"");
+		boolean deleteUsers = service.deleteUsers(userByName);
+		if(deleteStudents&&deleteUsers){
 			HttpUtil.getResponse().getWriter().print("success");
 		}
 		return null;

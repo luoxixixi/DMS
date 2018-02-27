@@ -83,7 +83,23 @@
 
 		function saveteacher() {
 			var name = $("#name").val();
+			if(name==""){
+        		layer.msg('请输入姓名', {
+					time: 1000,
+					icon: 7,
+					anim: 6});
+				return;
+        	}
 			var phone = $("#phone").val();
+			var reg = /^1[0-9]{10}$/;
+			var b = reg.test(phone);
+			if(!b){
+				layer.msg('请正确填入手机号码', {
+					time: 1000,
+					icon: 7,
+					anim: 6});
+				return;
+			}
 			$.ajax({
 				type : "post",
 				url : "/dms/saveTeacher",
@@ -92,14 +108,28 @@
 					teacherPhone : phone
 				},
 				success : function(data, textStatus) {
-					layer.msg('添加成功', {
-						time: 1000,
-						icon: 1,
-						end: function(index, layero){
-						var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-						parent.layer.close(index); //再执行关闭   
-						}
-						});
+					if(data=='success'){
+						layer.msg('添加成功', {
+							time: 1000,
+							icon: 1,
+							end: function(index, layero){
+							var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							window.parent.location.reload();
+							parent.layer.close(index); //再执行关闭   
+							}
+							});
+					}else if(data=='1'){
+						layer.msg('该手机号已注册', {
+							time: 1000,
+							icon: 7,
+							anim: 6});
+					}else{
+						layer.msg('服务器错误', {
+							time: 1000,
+							icon: 7,
+							anim: 6});
+					}
+					
 				}
 			})
 		}

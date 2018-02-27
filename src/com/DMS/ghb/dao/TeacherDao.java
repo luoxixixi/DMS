@@ -10,6 +10,7 @@ public interface TeacherDao {
 	public boolean updataTeacher(Teachers teachers);
 	public boolean deleteTeacher(Teachers teachers);
 	public List<Teachers> getTeacher();
+	public Teachers getTeacerById(String id);
 	public Teachers getTeacerByPhone(String phone);
 	public Teachers getTeachersByStu(Students students);
 }
