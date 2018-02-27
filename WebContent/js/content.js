@@ -109,8 +109,8 @@ $("#openPDF").click(function() {
 	});
 });
 $("#hisbutton").click(function() {
-	
-	layer.load();
+	window.location.href="historyFile";
+	//layer.load();
 });
 $("#buhege").click(function(){
 	layer.open({

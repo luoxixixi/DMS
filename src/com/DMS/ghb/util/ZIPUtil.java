@@ -13,7 +13,7 @@ import java.util.zip.ZipOutputStream;
 import com.DMS.ghb.entity.Documents;
 
 public class ZIPUtil {
-	public static void creatZIP(List<Documents> documents) {
+	public static void creatZIP(List<Documents> documents,String realPath) {
 		ZipOutputStream out = null;
 		try {
 
@@ -21,9 +21,9 @@ public class ZIPUtil {
 			// 处理压缩文件
 			out = new ZipOutputStream(new BufferedOutputStream(a));
 			for (int i = 0; i < documents.size(); i++) { // 对命令行输入的每个文件进行处理
-				System.out.println("Writing file" + documents.get(i));
+				System.out.println("Writing file" + documents.get(i).getFileName());
 				BufferedInputStream in = new BufferedInputStream(
-						new FileInputStream(documents.get(i)
+						new FileInputStream(realPath + "\\" + documents.get(i)
 								.getFileContentType()));
 				out.putNextEntry(new ZipEntry(documents.get(i)
 						.getFileContentType())); // 设置 ZipEntry 对象

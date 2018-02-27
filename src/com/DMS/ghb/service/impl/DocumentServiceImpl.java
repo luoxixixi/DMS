@@ -40,8 +40,8 @@ public class DocumentServiceImpl implements DocumentService {
 	}
 
 	@Override
-	public Documents getDocumentsById(Documents id) {
-		Documents documentsById = dao.getDocumentsById(id.getDocId());
+	public Documents getDocumentsById(String id) {
+		Documents documentsById = dao.getDocumentsById(id);
 		return documentsById;
 	}
 
@@ -56,8 +56,7 @@ public class DocumentServiceImpl implements DocumentService {
 
 	@Override
 	public boolean deleteDocuments(Documents documents) {
-		dao.deleteDocument(documents);
-		return false;
+		return dao.deleteDocument(documents);
 	}
 
 	@Override
@@ -70,8 +69,6 @@ public class DocumentServiceImpl implements DocumentService {
 			file.mkdirs();
 		}
 		String uuid = UUID.randomUUID().toString() + "---";
-		System.out.println("fileFileName: " + files.getFileName());
-		System.out.println(files.getFileContentType());
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");
 		try {
@@ -85,7 +82,6 @@ public class DocumentServiceImpl implements DocumentService {
 			while (-1 != (is.read(buffer, 0, buffer.length))) {
 				os.write(buffer);
 			}
-			files.setFileType(files.getFileContentType());
 			files.setFileContentType(uuid + files.getFileName());
 			files.setUpTime(TimeUtil.timeNow());
 			files.setFileSize(file.length() + "");

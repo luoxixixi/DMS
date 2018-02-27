@@ -8,8 +8,8 @@ public class Documents implements Serializable{
 	private String fileSize;// 文件大小
 	private String upTime;// 上传时间
 	private String fileContentType;// 文件类型
-	private String fileType;// 教师1，学生2
-	private String fileStatus;
+	private String fileType;// 上传者
+	private String fileStatus;//0 待审核 1 不合格 2 合格 7其他文档 8 教师文档 9 主任文档 
 	private Users userId;
 
 

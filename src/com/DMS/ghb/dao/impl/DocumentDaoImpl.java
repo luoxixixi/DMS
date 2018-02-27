@@ -14,6 +14,8 @@ public class DocumentDaoImpl extends HibernateDaoSupport implements DocumentDao 
 	public boolean saveDocument(Documents documents) {
 		try {
 			getHibernateTemplate().save(documents);
+			return true;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -24,6 +26,7 @@ public class DocumentDaoImpl extends HibernateDaoSupport implements DocumentDao 
 	public boolean deleteDocument(Documents documents) {
 		try {
 			getHibernateTemplate().delete(documents);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -110,11 +110,12 @@
 			<interceptor-ref name="defaultStack" />
 		</action>
 		<action name="getAllFile" class="documentAction" method="getAllFile">
-			<result name="success"></result>
+			<result name="success">/file_data_tables.jsp</result>
 		</action>
 		<action name="getFileByName" class="documentAction" method="getFileByName">
 			<result name="success"></result>
 		</action>
+		<action name="deleteFile"  class="documentAction" method="deletefile"></action>
 		<action name="downLoadFile" class="documentAction" method="downLoadFile">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet_stream</param>
@@ -122,6 +123,9 @@
 				<param name="inputName">fileInputStream</param>
 				<param name="bufferSize">1024</param>
 			</result>
+		</action>
+		<action name="historyFile" class="documentAction" method="historyFile">
+			<result name="success"></result>
 		</action>
 		<action name="downZipFile" class="documentAction" method="downZipFile">
 			<result name="success"></result>
