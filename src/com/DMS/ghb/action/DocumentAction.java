@@ -76,17 +76,19 @@ public class DocumentAction extends ActionSupport {
 	public String importStu() throws Exception {
 		FileInputStream is = new FileInputStream(file);
 		PoiTest test = new PoiTest(fileFileName, is);
-		Map<Integer, Map<Integer, Object>> readExcelContent = test.readExcelContent();
-		Set<Entry<Integer,Map<Integer,Object>>> entrySet = readExcelContent.entrySet();
+		Map<Integer, Map<Integer, Object>> readExcelContent = test
+				.readExcelContent();
+		Set<Entry<Integer, Map<Integer, Object>>> entrySet = readExcelContent
+				.entrySet();
 		for (Entry<Integer, Map<Integer, Object>> entry : entrySet) {
 			Map<Integer, Object> value = entry.getValue();
 			Students students = new Students();
 			Users users = new Users();
-			String num =(String) value.get(0);
-			String name =(String) value.get(1);
-			String dept =(String) value.get(2);
-			String major =(String) value.get(3);
-			String cls =(String) value.get(4);
+			String num = (String) value.get(0);
+			String name = (String) value.get(1);
+			String dept = (String) value.get(2);
+			String major = (String) value.get(3);
+			String cls = (String) value.get(4);
 			users.setUserName(num);
 			users.setUserPsw(num);
 			users.setType("1");
@@ -100,6 +102,7 @@ public class DocumentAction extends ActionSupport {
 		}
 		return SUCCESS;
 	}
+
 	/**
 	 * 文件上传
 	 * 
@@ -110,15 +113,22 @@ public class DocumentAction extends ActionSupport {
 		Users users = (Users) ServletActionContext.getRequest().getSession()
 				.getAttribute("suser");// 获取上传者
 		String type = users.getType();
-		String name="";
-		if(type.equals("1")){
-			Students students =(Students) HttpUtil.getSession().getAttribute("user");
+		String name = "";
+		String realName = "";
+		if (type.equals("1")) {
+			Students students = (Students) HttpUtil.getSession().getAttribute(
+					"user");
 			name = students.getName();
-		}else if (type.equals("2")) {
-			Teachers teachers =(Teachers) HttpUtil.getSession().getAttribute("user");
+			realName = "学生文件\\" + students.getDepartments() + "\\"
+					+ students.getMajor() + "\\" + students.getClasses();
+		} else if (type.equals("2")) {
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+					"user");
 			name = teachers.getName();
-		}else if (type.equals("3")){
+			realName = "教师文件\\" + teachers.getName();
+		} else if (type.equals("3")) {
 			name = users.getUserName();
+			realName = "主任文件";
 		}
 		// 准备数据
 		Documents files = new Documents();
@@ -126,13 +136,14 @@ public class DocumentAction extends ActionSupport {
 		files.setFileContentType(fileContentType);
 		files.setFileType(name);
 		files.setUserId(users);
-		if(type.equals("1")){
+		files.setPath(realName);
+		if (type.equals("1")) {
 			files.setFileStatus("0");
-		}else if (type.equals("2")) {
+		} else if (type.equals("2")) {
 			files.setFileStatus("8");
-		}else if (type.equals("3")){
+		} else if (type.equals("3")) {
 			files.setFileStatus("9");
-		}else {
+		} else {
 			files.setFileStatus("7");
 		}
 		// 保存
@@ -155,7 +166,7 @@ public class DocumentAction extends ActionSupport {
 		List<Documents> files = service.getDocuments();// 查询文件
 		if (files != null && files.size() > 0) {
 			ServletActionContext.getRequest().setAttribute("files", files);// 数据回传
-		}else {
+		} else {
 			files = new ArrayList<Documents>();
 			ServletActionContext.getRequest().setAttribute("files", files);// 数据回传
 		}
@@ -185,22 +196,27 @@ public class DocumentAction extends ActionSupport {
 	public String downLoadFile() throws Exception {
 		fileFileName = ServletActionContext.getRequest().getParameter(
 				"fileName");// 获取文件名
+		String path = HttpUtil.getRequset().getParameter("path");
+		path = HttpUtil.transForUTF(path);
 		String fileName = new String(fileFileName.getBytes("ISO8859-1"),
 				"UTF-8");// 编码
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
 		System.out.println(root);
 		System.out.println(fileName);
-		fileInputStream = new FileInputStream(root + "/" + fileName);// 或得文件输入流
+		fileInputStream = new FileInputStream(root + "/" + path + "/"
+				+ fileName);// 或得文件输入流
 		fileFileName = fileFileName.split("---")[1];// 更新文件名
 		return SUCCESS;
 	}
+
 	/**
 	 * 删除文件
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public String deletefile() throws Exception{
+	public String deletefile() throws Exception {
 		fileFileName = ServletActionContext.getRequest().getParameter(
 				"fileName");// 获取文件名
 		String fileId = HttpUtil.getRequset().getParameter("fileId");
@@ -208,7 +224,7 @@ public class DocumentAction extends ActionSupport {
 				"UTF-8");// 编码
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
-		
+
 		Documents documentsById = service.getDocumentsById(fileId);
 		boolean deleteDocuments = service.deleteDocuments(documentsById);
 		System.out.println(deleteDocuments);
@@ -222,21 +238,24 @@ public class DocumentAction extends ActionSupport {
 			}
 		}
 		return null;
-		
+
 	}
+
 	/**
 	 * 归档文件
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public String historyFile() throws Exception{
+	public String historyFile() throws Exception {
 		List<Documents> documents = service.getDocuments();
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
 		ZIPUtil.creatZIP(documents, root);
 		return null;
-		
+
 	}
+
 	/**
 	 * 下载压缩文件
 	 * 
@@ -246,6 +265,7 @@ public class DocumentAction extends ActionSupport {
 	public String downZipFile() throws Exception {
 		return SUCCESS;
 	}
+
 	public DocumentService getService() {
 		return service;
 	}
@@ -253,7 +273,6 @@ public class DocumentAction extends ActionSupport {
 	public void setService(DocumentService service) {
 		this.service = service;
 	}
-
 
 	public UserService getUserService() {
 		return userService;

@@ -61,16 +61,16 @@
 			<result name="success"></result>
 		</action>
 		<action name="showAnn" class="announcementAction" method="showAnn">
-			<result name="success"></result>
+			<result name="success">/article.jsp</result>
 		</action>
 		<action name="saveAnn" class="announcementAction" method="saveAnn">
-			<result name="success"></result>
+			<result name="success" type="redirect">showAnnByUser</result>
 		</action>
 		<action name="deleteAnn" class="announcementAction" method="deleteAnn">
-			<result name="success"></result>
+			<result name="success" type="redirect">showAnnByUser</result>
 		</action>
 		<action name="showAnnByUser" class="announcementAction" method="showAnnByUser">
-			<result name="success"></result>
+			<result name="success">/blog.jsp</result>
 		</action>
 		<action name="showAllCls" class="classesAction" method="showAllCls">
 			<result name="success"></result>

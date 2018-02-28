@@ -8,8 +8,18 @@ public class Announcement implements Serializable{
 	private String body;// 内容
 	private String time;// 发布时间
 	private Teachers teaId;// 发布者
+	private String leavel;
+	
+	
 
 
+	public String getLeavel() {
+		return leavel;
+	}
+
+	public void setLeavel(String leavel) {
+		this.leavel = leavel;
+	}
 
 	public String getAnnId() {
 		return annId;
@@ -49,6 +59,13 @@ public class Announcement implements Serializable{
 
 	public void setTeaId(Teachers teaId) {
 		this.teaId = teaId;
+	}
+
+	@Override
+	public String toString() {
+		return "Announcement [annId=" + annId + ", head=" + head + ", body="
+				+ body + ", time=" + time + ", teaId=" + teaId + ", leavel="
+				+ leavel + "]";
 	}
 
 	 

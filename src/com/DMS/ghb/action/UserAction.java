@@ -52,8 +52,7 @@ public class UserAction extends ActionSupport {
 				session.setAttribute("user", teachers);
 				return "TEACHER";
 			} else if (userType.equals("3")) {// 主任
-				Teachers teacher = teacherService.getTeacherByPhone(user
-						.getUserName());
+				Teachers teacher = teacherService.getTeacherByPhone("@zhuren");
 				session.setAttribute("user", teacher);
 				return "DIRECTOR";
 			} else if (userType.equals("4")) {// 管zho 理

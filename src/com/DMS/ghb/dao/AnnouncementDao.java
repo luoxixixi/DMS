@@ -9,5 +9,5 @@ public interface AnnouncementDao {
 	public boolean deleteAnn(Announcement announcement);
 	public List<Announcement> getAnnAll();
 	public Announcement getAnnById(String string);
-	public List<Announcement> getAnnByUser(long teaId);
+	public List<Announcement> getAnnByUser(String teaId);
 }

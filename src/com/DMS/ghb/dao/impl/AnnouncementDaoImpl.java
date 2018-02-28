@@ -61,9 +61,9 @@ public class AnnouncementDaoImpl extends HibernateDaoSupport implements
 	}
 
 	@Override
-	public List<Announcement> getAnnByUser(long teaId) {
+	public List<Announcement> getAnnByUser(String teaId) {
 		try {
-			String hql = "from Announcement where annId=?";
+			String hql = "from Announcement where leavel='2'";
 			@SuppressWarnings("unchecked")
 			List<Announcement> announcements = (List<Announcement>) getHibernateTemplate()
 					.find(hql);

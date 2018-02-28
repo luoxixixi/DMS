@@ -59,7 +59,7 @@
 										<td>${d.fileType }</td>
 										<td class="center">
 											<button type="button" class="btn btn-primary btn-sm"
-												onclick="downLoad('${d.fileContentType}')">下载</button>
+												onclick="downLoad('${d.path }','${d.fileContentType}')">下载</button>
 											<button id="openPDF" type="button"
 												class="btn btn-primary btn-sm">查看</button>
 											<button type="button" class="btn btn-primary btn-sm"
@@ -128,8 +128,8 @@
 
 		}
 
-		function downLoad(fileName) {
-			window.location.href = "downLoadFile?fileName="+fileName;
+		function downLoad(path,fileName) {
+			window.location.href = "downLoadFile?fileName="+fileName+"&path="+path;
 		}
 		function deleteFile(fileId, fileName) {
 			layer.confirm('是否删除？', {

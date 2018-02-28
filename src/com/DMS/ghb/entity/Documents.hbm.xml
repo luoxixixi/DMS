@@ -11,6 +11,9 @@
         <property name="fileName" type="java.lang.String">
             <column name="FILENAME" />
         </property>
+         <property name="path" type="java.lang.String">
+            <column name="PATH" />
+        </property>
         <property name="fileSize" type="java.lang.String">
             <column name="FILESIZE" />
         </property>

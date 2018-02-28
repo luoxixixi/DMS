@@ -1,5 +1,6 @@
 package com.DMS.ghb.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,5 +23,20 @@ public class TimeUtil {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		String timeNow = format.format(date);
 		return timeNow;
+	}
+	/**
+	 * 字符串转成日期
+	 * @param time
+	 * @return
+	 */
+	public static long getLongTime(String time){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		try {
+			Date parse = format.parse(time);
+			return parse.getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

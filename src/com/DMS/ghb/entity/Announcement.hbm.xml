@@ -11,6 +11,9 @@
         <property name="head" type="java.lang.String">
             <column name="HEAD" />
         </property>
+        <property name="leavel" type="java.lang.String">
+            <column name="LEAVEL" />
+        </property>
         <property name="body" type="java.lang.String">
             <column name="BODY" />
         </property>

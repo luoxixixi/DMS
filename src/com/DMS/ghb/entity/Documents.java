@@ -10,6 +10,7 @@ public class Documents implements Serializable{
 	private String fileContentType;// 文件类型
 	private String fileType;// 上传者
 	private String fileStatus;//0 待审核 1 不合格 2 合格 7其他文档 8 教师文档 9 主任文档 
+	private String path;
 	private Users userId;
 
 
@@ -20,6 +21,14 @@ public class Documents implements Serializable{
 
 	public void setDocId(String docId) {
 		this.docId = docId;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public String getFileName() {

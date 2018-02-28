@@ -19,6 +19,7 @@ import com.DMS.ghb.entity.Documents;
 import com.DMS.ghb.entity.Users;
 import com.DMS.ghb.service.DocumentService;
 import com.DMS.ghb.util.TimeUtil;
+import com.DMS.ghb.util.fileSizeTest;
 
 public class DocumentServiceImpl implements DocumentService {
 	private DocumentDao dao;
@@ -73,7 +74,7 @@ public class DocumentServiceImpl implements DocumentService {
 				"/upload");
 		try {
 			is = new FileInputStream(file);
-			File fileTem = new File(root, uuid + files.getFileName());
+			File fileTem = new File(root+"\\"+files.getPath(), uuid + files.getFileName());
 			if (!fileTem.getParentFile().exists()) {
 				fileTem.getParentFile().mkdirs();
 			}
@@ -84,7 +85,7 @@ public class DocumentServiceImpl implements DocumentService {
 			}
 			files.setFileContentType(uuid + files.getFileName());
 			files.setUpTime(TimeUtil.timeNow());
-			files.setFileSize(file.length() + "");
+			files.setFileSize(fileSizeTest.getPrintSize(file.length()));
 			return dao.saveDocument(files);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
