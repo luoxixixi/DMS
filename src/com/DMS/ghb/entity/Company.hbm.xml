@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2018-2-5 18:28:42 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 2018-3-1 10:15:58 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.DMS.ghb.entity.Company" table="COMPANY">
         <id name="companyId" type="java.lang.String">
@@ -14,6 +14,15 @@
         <property name="address" type="java.lang.String">
             <column name="ADDRESS" />
         </property>
+        <property name="cTeacher" type="java.lang.String" access="field">
+            <column name="CTEACHER" />
+        </property>
+        <property name="cPhonr" type="java.lang.String" access="field">
+            <column name="CPHONR" />
+        </property>
         <one-to-one name="stuId" class="com.DMS.ghb.entity.Students"></one-to-one>
+        <many-to-one name="mission" class="com.DMS.ghb.entity.Mission" fetch="join">
+            <column name="MISSIONID" />
+        </many-to-one>
     </class>
 </hibernate-mapping>

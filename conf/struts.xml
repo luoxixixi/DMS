@@ -154,6 +154,12 @@
 		<action name="exportPaper" class="papersAction" method="export">
 			<result name="success"></result>
 		</action>
+		<action name="getMission" class="missionAction" method="getMissionByUser">
+			<result name="success">/mission_data_tables.jsp</result>
+		</action>
+		<action name="saveMission" class="missionAction" method="saveMission">
+			<result name="success">/getMission</result>
+		</action>
 	</package>
 
 </struts>

@@ -6,7 +6,14 @@ public class Papers implements Serializable{
 	private String papersId;
 	private String name;
 	private Students students;
-
+	private Mission mission;
+	
+	public Mission getMission() {
+		return mission;
+	}
+	public void setMission(Mission mission) {
+		this.mission = mission;
+	}
 	public String getPapersId() {
 		return papersId;
 	}

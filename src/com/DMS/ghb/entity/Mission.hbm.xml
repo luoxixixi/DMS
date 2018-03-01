@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-3-1 14:42:00 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.DMS.ghb.entity.Mission" table="MISSION">
+        <id name="id" type="java.lang.String">
+            <column name="ID" />
+            <generator class="uuid" />
+        </id>
+        <property name="missionName" type="java.lang.String">
+            <column name="MISSIONNAME" />
+        </property>
+        <property name="missionTime" type="java.lang.String">
+            <column name="MISSIONTIME" />
+        </property>
+        <property name="missionEndTime" type="java.lang.String">
+            <column name="MISSIONENDTIME" />
+        </property>
+        <property name="missionContent" type="java.lang.String">
+            <column name="MISSIONCONTENT" />
+        </property>
+        <property name="missionType" type="java.lang.String">
+            <column name="MISSIONTYPE" />
+        </property>
+        <property name="missionStatus" type="java.lang.String">
+            <column name="MISSIONSTATUS" />
+        </property>
+        <property name="leavel" type="java.lang.String">
+            <column name="LEAVEL" />
+        </property>
+        <many-to-one name="teachers" class="com.DMS.ghb.entity.Teachers" fetch="join">
+            <column name="TEAID" />
+        </many-to-one>
+        <set name="papers" table="PAPERS" inverse="false" lazy="true">
+            <key>
+                <column name="MISSIONID" />
+            </key>
+            <one-to-many class="com.DMS.ghb.entity.Papers" />
+        </set>
+        <set name="companies" table="COMPANY" inverse="false" lazy="true">
+            <key>
+                <column name="MISSIONID" />
+            </key>
+            <one-to-many class="com.DMS.ghb.entity.Company" />
+        </set>
+    </class>
+</hibernate-mapping>

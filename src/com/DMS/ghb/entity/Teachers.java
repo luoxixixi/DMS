@@ -10,6 +10,7 @@ public class Teachers implements Serializable{
 	private String phone;
 	private String teaInfo;
 	private String major;
+	Set<Mission> missions;
 	Set<Students> students;
 	Set<Announcement> announcements;
 
@@ -72,6 +73,14 @@ public class Teachers implements Serializable{
 
 	public void setAnnouncements(Set<Announcement> announcements) {
 		this.announcements = announcements;
+	}
+
+	public Set<Mission> getMissions() {
+		return missions;
+	}
+
+	public void setMissions(Set<Mission> missions) {
+		this.missions = missions;
 	}
 
 	

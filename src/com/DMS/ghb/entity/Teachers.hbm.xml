@@ -32,5 +32,11 @@
             </key>
             <one-to-many class="com.DMS.ghb.entity.Announcement" />
         </set>
+        <set name="missions" table="MISSION" inverse="false" lazy="true">
+            <key>
+                <column name="TEAID" />
+            </key>
+            <one-to-many class="com.DMS.ghb.entity.Mission" />
+        </set>
     </class>
 </hibernate-mapping>

@@ -1,85 +1,165 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
+<head>
 
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title> - 基本表单</title>
-		<meta name="keywords" content="">
-		<meta name="description" content="">
+<title>- 基本表单</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
 
-		<link rel="shortcut icon" href="favicon.ico">
-		<link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-		<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
-		<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
-		<link href="css/animate.css" rel="stylesheet">
-		<link href="css/style.css?v=4.1.0" rel="stylesheet">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="css/animate.css" rel="stylesheet">
+<link href="css/style.css?v=4.1.0" rel="stylesheet">
 
-	</head>
+</head>
 
-	<body class="gray-bg">
-		<div class="wrapper wrapper-content animated fadeInRight">
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="ibox float-e-margins">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
 
-						<div class="ibox-content">
-							<form method="get" class="form-horizontal">
-									<div class="form-group">
-										<label class="col-sm-2 control-label">请选择任务类型：</label>
-										<div class="col-sm-8">
-											<select class="form-control" name="">
-												<option>毕设调查</option>
-												<option>实习单位调查</option>
-											</select>
-										</div>
-									</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">请输入任务名称</label>
-
-									<div class="col-sm-8">
-										<input type="text" name="name" placeholder="请输入任务名称" class="form-control">
-									</div>
-
+					<div class="ibox-content">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">请选择任务类型：</label>
+								<div class="col-sm-8">
+									<select class="form-control" id="type" name="type">
+										<option value="">--请选择--</option>
+										<option value="1">毕设调查</option>
+										<option value="2">实习单位调查</option>
+									</select>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">简介</label>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">请输入任务名称</label>
 
-									<div class="col-sm-8">
-										<textarea placeholder="请输入内容简介" style="margin: 0px; width: 100%; height: 360px;"></textarea>
-									</div>
+								<div class="col-sm-8">
+									<input type="text" id="name" name="name" placeholder="请输入任务名称"
+										class="form-control" oninput="checkTitle()">
 								</div>
-							</form>
+
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">简介</label>
+
+								<div class="col-sm-8">
+									<textarea id="content" placeholder="请输入内容简介"
+										style="margin: 0px; width: 100%; height: 110px;"
+										oninput="checkContent()"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<center>
+									<button type="button" class="btn btn-primary btn-sm"
+										onclick="save()">发布</button>
+								</center>
+							</div>
 						</div>
-
 					</div>
 
 				</div>
+
 			</div>
 		</div>
-		</div>
+	</div>
+	</div>
 
-		<!-- 全局js -->
-		<script src="js/jquery.min.js?v=2.1.4"></script>
-		<script src="js/bootstrap.min.js?v=3.3.6"></script>
-		<script src="js/plugins/layer/layer.min.js"></script>
+	<!-- 全局js -->
+	<script src="js/jquery.min.js?v=2.1.4"></script>
+	<script src="js/bootstrap.min.js?v=3.3.6"></script>
+	<script src="js/plugins/layer/layer.min.js"></script>
 
-		<!-- 自定义js -->
-		<script src="js/content.js?v=1.0.0"></script>
+	<!-- 自定义js -->
+	<script src="js/content.js?v=1.0.0"></script>
 
-		<!-- iCheck -->
-		<script src="js/plugins/iCheck/icheck.min.js"></script>
-		<script>
-			$(document).ready(function() {
-				$('.i-checks').iCheck({
-					checkboxClass: 'icheckbox_square-green',
-					radioClass: 'iradio_square-green',
-				});
+	<!-- iCheck -->
+	<script src="js/plugins/iCheck/icheck.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('.i-checks').iCheck({
+				checkboxClass : 'icheckbox_square-green',
+				radioClass : 'iradio_square-green',
 			});
-		</script>
+		});
+		function checkTitle() {
+			var name = $('#name').val();
+			if (name.length > 30) {
+				layer.msg('标题不能大于30字', {
+					time : 1000,
+					icon : 7,
+				});
+				name = name.substring(0, 30);
+				$("#name").val(name);
+			}
+		}
 
-	</body>
+		function checkContent() {
+			var content = $('#content').val();
+			if (content.length > 150) {
+				layer.msg('内容不能大于150字', {
+					time : 1000,
+					icon : 7,
+				});
+				content = content.substring(0, 150);
+				$("#content").val(content);
+			}
+		}
+		function save() {
+			var type = $('#type option:selected').val();
+			var name = $('#name').val();
+			var content = $('#content').val();
+			if (type == "" || name == "" || content == "") {
+				layer.msg('请选择或填入必要的值', {
+					time : 1000,
+					icon : 7,
+				});
+				return;
+			}
+			layer.confirm('发布后不可删除不可修改，是否继续发布？', {
+				icon : 3,
+				btn : [ '是', '否' ]
+			//按钮
+			}, function() {
+				$.ajax({
+					type : "post",
+					url : "/dms/saveMission",
+					data : {
+						type : type,
+						title : name,
+						contest : content
+					},
+					success : function(data, textStatus) {
+						if (data == 'success') {
+							layer.msg('已发布', {
+								time : 1000,
+								icon : 1,
+								end : function(index, layero) {
+									var index = parent.layer
+											.getFrameIndex(window.name); //先得到当前iframe层的索引
+									window.parent.location.reload();
+									parent.layer.close(index); //再执行关闭   
+								}
+							});
+						} else {
+							layer.msg('服务器错误,保存失败！', {
+								time : 1000,
+								icon : 7,
+							});
+						}
+					}
+				})
+			});
+
+		}
+	</script>
+
+</body>
 
 </html>

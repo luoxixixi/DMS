@@ -43,6 +43,7 @@
 				<value>com/DMS/ghb/entity/Students.hbm.xml</value>
 				<value>com/DMS/ghb/entity/Teachers.hbm.xml</value>
 				<value>com/DMS/ghb/entity/Users.hbm.xml</value>
+				<value>com/DMS/ghb/entity/Mission.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -68,6 +69,9 @@
 	</bean>
 	<bean id="userDaoImpl" class="com.DMS.ghb.dao.impl.UserDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="missionDaoImpl" class="com.DMS.ghb.dao.impl.MissionDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 
 	<!-- 声明事务管理器 -->
@@ -117,6 +121,9 @@
 	<bean id="userServiceImpl" class="com.DMS.ghb.service.impl.UserServiceImpl">
 		<property name="dao" ref="userDaoImpl"></property>
 	</bean>
+	<bean id="missionServiceImpl" class="com.DMS.ghb.service.impl.MissionServiceImpl">
+		<property name="dao" ref="missionDaoImpl"></property>
+	</bean>
 
 	<!-- action -->
 	<bean id="userAction" class="com.DMS.ghb.action.UserAction">
@@ -140,4 +147,10 @@
 	<bean id="papersAction" class="com.DMS.ghb.action.PapersAction">
 		<property name="service" ref="papersServiceImpl"></property>
 	</bean>
-</beans>
+	<bean id="missionAction" class="com.DMS.ghb.action.MissionAction">
+		<property name="service" ref="missionServiceImpl"></property>
+		<property name="userService" ref="userServiceImpl"></property>
+		<property name="studentService" ref="studentServiceImpl"></property>
+		<property name="teacherService" ref="teacherServiceImpl"></property>
+	</bean>
+</beans> 

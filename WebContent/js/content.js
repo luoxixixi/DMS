@@ -57,9 +57,8 @@ $("#addmission").click(function() {
 		title: '添加任务',
 		shadeClose: true,
 		shade: false,
-		 btn: ['添加', '取消'],
 		maxmin: true, //开启最大化最小化按钮
-		area: ['893px', '600px'],
+		area: ['893px', '400px'],
 		content: 'addmission.html'
 	});
 });

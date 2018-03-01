@@ -240,7 +240,10 @@ public class DocumentAction extends ActionSupport {
 		return null;
 
 	}
-
+	public String getHis() throws Exception{
+		
+		return SUCCESS;
+	}
 	/**
 	 * ¹éµµÎÄ¼þ
 	 * 
