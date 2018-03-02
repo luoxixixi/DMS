@@ -89,6 +89,17 @@ public class UserAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String getAllTeacher() throws Exception{
+		String isStu = HttpUtil.getRequset().getParameter("isStu");
+		if(isStu!=null){
+			Students students =  (Students) HttpUtil.getSession().getAttribute("user");
+			Teachers teacher = studentService.getStuById(students.getStuId()).getTeachers();
+			if(teacher!=null){
+				List<Teachers> teachers = new ArrayList<Teachers>();
+				teachers.add(teacher);
+				HttpUtil.getRequset().setAttribute("allteacher", teachers);
+				return SUCCESS;
+			}
+		}
 		List<Teachers> teachers = teacherService.getTeachers();
 		if(teachers!=null&&teachers.size()>0){
 			HttpUtil.getRequset().setAttribute("allteacher", teachers);
@@ -296,13 +307,18 @@ public class UserAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String choiceTeacher() throws Exception {
-		HttpServletRequest requset = HttpUtil.getRequset();
+		String teaId = HttpUtil.getRequset().getParameter("teaId");
 		Students student = (Students) HttpUtil.getSession()
 				.getAttribute("user");
-		Teachers teachers = teacherService.getTeacherByPhone("13888888888");
-		student.setTeachers(teachers);
-		studentService.updataStudents(student);
-		return SUCCESS;
+		Teachers teacerById = teacherService.getTeacerById(teaId);
+		student.setTeachers(teacerById);
+		boolean updataStudents = studentService.updataStudents(student);
+		if (updataStudents) {
+			HttpUtil.getResponse().getWriter().print("success");
+			return null;
+		}
+		HttpUtil.getResponse().getWriter().print("error");
+		return null;
 	}
 
 	/**

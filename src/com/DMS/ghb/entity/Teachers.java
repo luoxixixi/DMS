@@ -10,6 +10,7 @@ public class Teachers implements Serializable{
 	private String phone;
 	private String teaInfo;
 	private String major;
+	private String type;
 	Set<Mission> missions;
 	Set<Students> students;
 	Set<Announcement> announcements;
@@ -24,6 +25,14 @@ public class Teachers implements Serializable{
 
 
 	
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getMajor() {
 		return major;

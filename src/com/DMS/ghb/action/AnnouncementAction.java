@@ -3,6 +3,7 @@ package com.DMS.ghb.action;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -129,8 +130,15 @@ public class AnnouncementAction extends ActionSupport {
 			announcementByUser.addAll(announcements);
 		}else if (user.getType().equals("1")) {
 			Students student = (Students) HttpUtil.getSession().getAttribute("user");
-			announcementByUser = service.getAnnouncementByUser(student.getTeachers().getTeaId());
-			Set<Announcement> announcements =studentService.getStuById(student.getStuId()).getTeachers().getAnnouncements();
+			announcementByUser = service.getAnnouncementByUser(null);
+			Teachers teachers = studentService.getStuById(student.getStuId()).getTeachers();
+			Set<Announcement> announcements = new HashSet<Announcement>();
+			if(teachers!=null){
+				announcements = teachers.getAnnouncements();
+				if(announcements==null){
+					announcements = new HashSet<Announcement>();
+				}
+			}
 			announcementByUser.addAll(announcements);
 		}
 		Collections.sort(announcementByUser, new Comparator<Announcement>() {

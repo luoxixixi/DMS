@@ -166,6 +166,7 @@ public class DocumentAction extends ActionSupport {
 		List<Documents> files = service.getDocuments();// 查询文件
 		if (files != null && files.size() > 0) {
 			ServletActionContext.getRequest().setAttribute("files", files);// 数据回传
+			System.out.println(files.get(0).getPath());
 		} else {
 			files = new ArrayList<Documents>();
 			ServletActionContext.getRequest().setAttribute("files", files);// 数据回传
@@ -194,19 +195,17 @@ public class DocumentAction extends ActionSupport {
 	 * 下载文件
 	 */
 	public String downLoadFile() throws Exception {
-		fileFileName = ServletActionContext.getRequest().getParameter(
-				"fileName");// 获取文件名
-		String path = HttpUtil.getRequset().getParameter("path");
-		path = HttpUtil.transForUTF(path);
-		String fileName = new String(fileFileName.getBytes("ISO8859-1"),
-				"UTF-8");// 编码
+		String fileId = HttpUtil.getRequset().getParameter("fileId");
+		Documents document = service.getDocumentsById(fileId);
+		fileFileName = document.getFileName();
+		String path = document.getPath();
+		String fileName = document.getFileContentType();
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
 		System.out.println(root);
 		System.out.println(fileName);
 		fileInputStream = new FileInputStream(root + "/" + path + "/"
 				+ fileName);// 或得文件输入流
-		fileFileName = fileFileName.split("---")[1];// 更新文件名
 		return SUCCESS;
 	}
 
@@ -217,11 +216,9 @@ public class DocumentAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String deletefile() throws Exception {
-		fileFileName = ServletActionContext.getRequest().getParameter(
-				"fileName");// 获取文件名
+		
 		String fileId = HttpUtil.getRequset().getParameter("fileId");
-		String fileName = new String(fileFileName.getBytes("ISO8859-1"),
-				"UTF-8");// 编码
+		
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
 
@@ -229,7 +226,7 @@ public class DocumentAction extends ActionSupport {
 		boolean deleteDocuments = service.deleteDocuments(documentsById);
 		System.out.println(deleteDocuments);
 		if (deleteDocuments) {
-			String path = root + "\\" + fileName;
+			String path = root + "\\" +documentsById.getPath()+"\\"+documentsById.getFileContentType();
 			System.out.println(path);
 			File file = new File(path);
 			boolean delete = file.delete();

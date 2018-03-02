@@ -29,7 +29,9 @@
 		<action name="getAllTeacher" class="userAction" method="getAllTeacher">
 			<result name="success">/teacher_info_tables.jsp</result>
 		</action>
-		
+		<action name="getMyTeacher" class="userAction" method="getAllTeacher">
+			<result name="success">/contacts.jsp</result>
+		</action>
 		<action name="changePassword" class="userAction" method="changePassword">
 			<result name="success"></result>
 		</action>

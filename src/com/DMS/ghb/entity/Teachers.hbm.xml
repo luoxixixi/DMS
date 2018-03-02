@@ -20,6 +20,9 @@
         <property name="major" type="java.lang.String">
             <column name="MAJOR" />
         </property>
+         <property name="type" type="java.lang.String">
+            <column name="TYPE" />
+        </property>
         <set name="students" table="STUDENTS" inverse="false" lazy="true">
             <key>
                 <column name="TEAID" />

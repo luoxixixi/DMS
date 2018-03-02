@@ -75,7 +75,7 @@ public class TeacherDaoImpl extends HibernateDaoSupport implements TeacherDao {
 	@Override
 	public List<Teachers> getTeacher() {
 		try {
-			String hql = "from Teachers";
+			String hql = "from Teachers where type = 2";
 			List<Teachers> teachers = (List<Teachers>) getHibernateTemplate()
 					.find(hql);
 			if (teachers != null && teachers.size() > 0) {
