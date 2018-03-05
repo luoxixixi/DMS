@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts2.ServletActionContext;
 
 import com.DMS.ghb.entity.Documents;
@@ -17,6 +19,7 @@ import com.DMS.ghb.entity.Users;
 import com.DMS.ghb.service.DocumentService;
 import com.DMS.ghb.service.StudentService;
 import com.DMS.ghb.service.UserService;
+import com.DMS.ghb.util.Doc2HtmlUtil;
 import com.DMS.ghb.util.HttpUtil;
 import com.DMS.ghb.util.PoiTest;
 import com.DMS.ghb.util.ZIPUtil;
@@ -216,9 +219,9 @@ public class DocumentAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String deletefile() throws Exception {
-		
+
 		String fileId = HttpUtil.getRequset().getParameter("fileId");
-		
+
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
 
@@ -226,7 +229,8 @@ public class DocumentAction extends ActionSupport {
 		boolean deleteDocuments = service.deleteDocuments(documentsById);
 		System.out.println(deleteDocuments);
 		if (deleteDocuments) {
-			String path = root + "\\" +documentsById.getPath()+"\\"+documentsById.getFileContentType();
+			String path = root + "\\" + documentsById.getPath() + "\\"
+					+ documentsById.getFileContentType();
 			System.out.println(path);
 			File file = new File(path);
 			boolean delete = file.delete();
@@ -237,10 +241,12 @@ public class DocumentAction extends ActionSupport {
 		return null;
 
 	}
-	public String getHis() throws Exception{
-		
+
+	public String getHis() throws Exception {
+
 		return SUCCESS;
 	}
+
 	/**
 	 * 归档文件
 	 * 
@@ -254,6 +260,54 @@ public class DocumentAction extends ActionSupport {
 		ZIPUtil.creatZIP(documents, root);
 		return null;
 
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String showFile() throws Exception {
+		String docId = HttpUtil.getRequset().getParameter("docId");
+		Documents documentsById = service.getDocumentsById(docId);
+
+		String root = ServletActionContext.getServletContext().getRealPath(
+				"/upload");// 获取真实路径
+		String path = root + "\\" + documentsById.getPath() + "\\"
+				+ documentsById.getFileContentType();
+		FileInputStream stream = new FileInputStream(path);
+		String toFilePath = root + "\\tempPDF";
+		String[] split = documentsById.getFileContentType().split("\\.");
+		String type = split[split.length - 1];
+		Doc2HtmlUtil t = Doc2HtmlUtil.getDoc2HtmlUtilInstance();
+		System.out.println(type);
+		String PDFname = t.file2pdf(stream, toFilePath, type);
+		if (PDFname == null) {
+			HttpUtil.getResponse().getWriter().print("error");
+			return null;
+		}
+		HttpServletRequest requset = HttpUtil.getRequset();
+		String responseStr = "http://" + requset.getServerName() + ":"
+				+ requset.getServerPort() + requset.getContextPath()
+				+ "/upload/tempPDF/" + PDFname;
+		HttpUtil.getResponse().getWriter().print(responseStr);
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String deleteFile2() throws Exception {
+		String root = ServletActionContext.getServletContext().getRealPath(
+				"/upload");// 获取真实路径
+		String url = HttpUtil.getRequset().getParameter("req");
+		String[] split = url.split("/");
+		String pdfName= split[split.length-1];
+		File file = new File(root+"/tempPDF/"+pdfName);
+		file.delete();
+		return null;
 	}
 
 	/**

@@ -60,8 +60,9 @@
 										<td class="center">
 											<button type="button" class="btn btn-primary btn-sm"
 												onclick="downLoad('${d.docId}')">下载</button>
-											<button id="openPDF" type="button"
-												class="btn btn-primary btn-sm">查看</button>
+											<button type="button"
+												class="btn btn-primary btn-sm"
+												onclick="showFile('${d.docId}')">查看</button>
 											<button type="button" class="btn btn-primary btn-sm"
 												onclick="deleteFile('${d.docId}', '${d.fileContentType}')">删除</button>
 										</td>
@@ -155,6 +156,45 @@
 					}
 				})
 			});
+		}
+		function showFile(id){
+			layer.load();
+			$.ajax({
+				type : "post",
+				url : "/dms/showFile",
+				data : {
+					docId : id
+				},
+				success : function(data, textStatus) {
+					if(data=="error"){
+						layer.msg('暂不支持该格式请下载后查看', {
+							time : 2000,
+							icon : 7,
+						});
+					}else{
+						layer.open({
+							type: 2,
+							title: '预览',
+							shadeClose: true,
+							shade: false,
+							maxmin: true, //开启最大化最小化按钮
+							area: ['880px', '550px'],
+							content: data,
+							cancel: function(){ 
+								$.ajax({
+									type : "post",
+									url : "/dms/deletePDF",
+									data : {
+										req : data
+									}
+								});
+								  }
+						});
+					}
+					layer.closeAll("loading");
+				},
+				
+			})
 		}
 	</script>
 

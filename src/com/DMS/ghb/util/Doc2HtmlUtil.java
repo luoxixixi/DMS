@@ -1,7 +1,6 @@
 package com.DMS.ghb.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +8,9 @@ import java.io.OutputStream;
 import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.jodconverter.office.LocalOfficeManager;
+import org.jodconverter.office.OfficeManager;
 
 import com.artofsolving.jodconverter.DocumentConverter;
 import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
@@ -122,9 +124,6 @@ public class Doc2HtmlUtil {
             htmFileName = "docx_" + timesuffix + ".pdf";
         }else if("xls".equals(type)){
             docFileName = "xls_" + timesuffix + ".xls";
-            htmFileName = "xls_" + timesuffix + ".pdf";
-        }else if("xlsx".equals(type)){
-            docFileName = "xls_" + timesuffix + ".xlsx";
             htmFileName = "xls_" + timesuffix + ".pdf";
         }else if("ppt".equals(type)){
             docFileName = "ppt_" + timesuffix + ".ppt";

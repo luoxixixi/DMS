@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.print.attribute.standard.Severity;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -68,32 +69,38 @@ public class UserAction extends ActionSupport {
 			return NONE;
 		}
 	}
+
 	/**
 	 * 查询所有学生
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public String getAllstudent() throws Exception{
+	public String getAllstudent() throws Exception {
 		List<Students> allStu = studentService.getAllStu();
-		if(allStu!=null&&allStu.size()>0){
+		if (allStu != null && allStu.size() > 0) {
 			HttpUtil.getRequset().setAttribute("allstudent", allStu);
-		}else {
+		} else {
 			allStu = new ArrayList<Students>();
 			HttpUtil.getRequset().setAttribute("allstudent", allStu);
 		}
 		return SUCCESS;
 	}
+
 	/**
 	 * 查询所有教师
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public String getAllTeacher() throws Exception{
+	public String getAllTeacher() throws Exception {
 		String isStu = HttpUtil.getRequset().getParameter("isStu");
-		if(isStu!=null){
-			Students students =  (Students) HttpUtil.getSession().getAttribute("user");
-			Teachers teacher = studentService.getStuById(students.getStuId()).getTeachers();
-			if(teacher!=null){
+		if (isStu != null) {
+			Students students = (Students) HttpUtil.getSession().getAttribute(
+					"user");
+			Teachers teacher = studentService.getStuById(students.getStuId())
+					.getTeachers();
+			if (teacher != null) {
 				List<Teachers> teachers = new ArrayList<Teachers>();
 				teachers.add(teacher);
 				HttpUtil.getRequset().setAttribute("allteacher", teachers);
@@ -101,14 +108,15 @@ public class UserAction extends ActionSupport {
 			}
 		}
 		List<Teachers> teachers = teacherService.getTeachers();
-		if(teachers!=null&&teachers.size()>0){
+		if (teachers != null && teachers.size() > 0) {
 			HttpUtil.getRequset().setAttribute("allteacher", teachers);
-		}else {
+		} else {
 			teachers = new ArrayList<Teachers>();
 			HttpUtil.getRequset().setAttribute("allteacher", teachers);
 		}
 		return SUCCESS;
 	}
+
 	/**
 	 * 修改密码
 	 * 
@@ -116,13 +124,17 @@ public class UserAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String changePassword() throws Exception {
-		System.out.println("进入方法");
-		Teachers teachers = teacherService.getTeacherByPhone("13888888888");
-		Set<Students> students = teachers.getStudents();
-		for (Students students2 : students) {
-			System.out.println(students2.getName());
+		String psw = HttpUtil.getRequset().getParameter("psw");
+		Users user = (Users) HttpUtil.getSession().getAttribute("suser");
+		user.setUserPsw(psw);
+		boolean updataUsers = service.updataUsers(user);
+		if (updataUsers) {
+			HttpUtil.getSession().setAttribute("suser", null);
+			HttpUtil.getSession().setAttribute("user", null);
+			return SUCCESS;
+		} else {
+			return ERROR;
 		}
-		return SUCCESS;
 	}
 
 	/**
@@ -139,9 +151,9 @@ public class UserAction extends ActionSupport {
 		String studept = requset.getParameter("studept");
 		String stumajor = requset.getParameter("stumajor");
 		String stucls = requset.getParameter("stucls");
-		
+
 		Students students = studentService.getStuById(stuid);
-		Users user = service.getUserByName(students.getStuNum()+"");
+		Users user = service.getUserByName(students.getStuNum() + "");
 		students.setName(stuname);
 		students.setStuNum(OtherUtils.getLong(stunum));
 		students.setDepartments(studept);
@@ -150,7 +162,8 @@ public class UserAction extends ActionSupport {
 		user.setUserName(stunum);
 		boolean updataStudents = studentService.updataStudents(students);
 		boolean updataUsers = service.updataUsers(user);
-		if(updataStudents&&updataUsers){
+		if (updataStudents && updataUsers) {
+			HttpUtil.getSession().setAttribute("user", students);
 			HttpUtil.getResponse().getWriter().print("success");
 			return null;
 		}
@@ -168,22 +181,27 @@ public class UserAction extends ActionSupport {
 		String id = requset.getParameter("teacherId");
 		String name = requset.getParameter("teacherName");
 		String phone = requset.getParameter("teacherPhone");
+		String major = requset.getParameter("tMajor");
+		String info = requset.getParameter("tInfo");
 		Teachers teacherByPhone = teacherService.getTeacherByPhone(phone);
 		Teachers teacerById = teacherService.getTeacerById(id);
 		HttpServletResponse response = ServletActionContext.getResponse();
-		if (teacherByPhone!=null) {
-			if(!(teacherByPhone.getPhone().equals(teacerById.getPhone()))){
-			response.getWriter().print("1");
-			return null;
+		if (teacherByPhone != null) {
+			if (!(teacherByPhone.getPhone().equals(teacerById.getPhone()))) {
+				response.getWriter().print("1");
+				return null;
 			}
 		}
 		Users userByName = service.getUserByName(teacerById.getPhone());
 		teacerById.setName(name);
 		teacerById.setPhone(phone);
+		teacerById.setMajor(major);
+		teacerById.setTeaInfo(info);
 		userByName.setUserName(phone);
 		boolean updataUsers = service.updataUsers(userByName);
 		boolean updataTeachers = teacherService.updataTeachers(teacerById);
-		if (updataTeachers&&updataUsers) {
+		if (updataTeachers && updataUsers) {
+			HttpUtil.getSession().setAttribute("user", teacerById);
 			response.getWriter().print("success");
 			return null;
 		}
@@ -201,13 +219,13 @@ public class UserAction extends ActionSupport {
 		String name = requset.getParameter("teacherName");
 		String phone = requset.getParameter("teacherPhone");
 		String psw = requset.getParameter("psw2");
-		
+
 		Teachers teachers = new Teachers();
 		teachers.setName(name);
 		teachers.setPhone(phone);
-		
-		if(psw==null||psw.equals("")){
-			psw="111";
+
+		if (psw == null || psw.equals("")) {
+			psw = "111";
 		}
 		Users users = new Users();
 		users.setUserName(phone);
@@ -215,14 +233,14 @@ public class UserAction extends ActionSupport {
 		users.setType("2");
 		HttpServletResponse response = ServletActionContext.getResponse();
 		Teachers teacherByPhone = teacherService.getTeacherByPhone(phone);
-		if(teacherByPhone!=null){
+		if (teacherByPhone != null) {
 			response.getWriter().print("1");
 			return null;
 		}
-		
+
 		boolean saveUser = service.saveUser(users);
 		boolean saveTeachers = teacherService.saveTeachers(teachers);
-		if(saveTeachers&&saveUser){
+		if (saveTeachers && saveUser) {
 			response.getWriter().print("success");
 			return null;
 		}
@@ -254,7 +272,8 @@ public class UserAction extends ActionSupport {
 		users.setType("1");
 		boolean saveStudent = studentService.saveStudent(students);
 		boolean saveUser = service.saveUser(users);
-		if(saveStudent&&saveUser){
+		if (saveStudent && saveUser) {
+
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.getWriter().print("success");
 			return null;
@@ -276,7 +295,7 @@ public class UserAction extends ActionSupport {
 		System.out.println(userByName.getUserId());
 		boolean deleteTeachers = teacherService.deleteTeachers(teacerById);
 		boolean deleteUsers = service.deleteUsers(userByName);
-		if (deleteTeachers&&deleteUsers) {
+		if (deleteTeachers && deleteUsers) {
 			HttpUtil.getResponse().getWriter().print("success");
 		}
 		return null;
@@ -292,9 +311,9 @@ public class UserAction extends ActionSupport {
 		String stuId = HttpUtil.getRequset().getParameter("stuId");
 		Students students = studentService.getStuById(stuId);
 		boolean deleteStudents = studentService.deleteStudents(students);
-		Users userByName = service.getUserByName(students.getStuNum()+"");
+		Users userByName = service.getUserByName(students.getStuNum() + "");
 		boolean deleteUsers = service.deleteUsers(userByName);
-		if(deleteStudents&&deleteUsers){
+		if (deleteStudents && deleteUsers) {
 			HttpUtil.getResponse().getWriter().print("success");
 		}
 		return null;
@@ -322,6 +341,27 @@ public class UserAction extends ActionSupport {
 	}
 
 	/**
+	 * 获取教师下的学生
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getStu() throws Exception {
+		Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute("user");
+		Set<Students> students = teacherService.getTeacerById(teachers.getTeaId()).getStudents();
+		List<Students> student= null;
+		if(students==null){
+			student = new ArrayList<Students>();
+		}else {
+			student = new ArrayList<Students>();
+			System.out.println(students.size());
+			student.addAll(students);
+		}
+		HttpUtil.getRequset().setAttribute("students", student);
+		return SUCCESS;
+	}
+
+	/**
 	 * 教师选择学生
 	 * 
 	 * @return
@@ -329,7 +369,27 @@ public class UserAction extends ActionSupport {
 	 */
 	public String choiceStu() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
+		String stuId = requset.getParameter("stuId");
+		Students stuById = studentService.getStuById(stuId);
+		stuById.setTeachers(null);
+		boolean updataStudents = studentService.updataStudents(stuById);
+		if (updataStudents) {
+			HttpUtil.getResponse().getWriter().print("success");
+			return null;
+		}
+		HttpUtil.getResponse().getWriter().print("error");
+		return null;
+	}
+
+	/**
+	 * 退出系统
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String exitSystem() throws Exception {
+		HttpUtil.getSession().setAttribute("suser", null);
+		HttpUtil.getSession().setAttribute("user", null);
 		return SUCCESS;
 	}
 

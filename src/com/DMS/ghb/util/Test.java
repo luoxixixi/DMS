@@ -14,13 +14,13 @@ import com.DMS.ghb.entity.Users;
 //
 public class Test {
 	public static void main(String[] args) {
-		 ApplicationContext factory = new ClassPathXmlApplicationContext(
-		 "applicationContext.xml");
-		 
-		StudentDaoImpl dao =(StudentDaoImpl) factory.getBean("studentDaoImpl");
-		TeacherDaoImpl dao1 =(TeacherDaoImpl) factory.getBean("teacherDaoImpl");
-		UserDaoImpl dao2 =(UserDaoImpl) factory.getBean("userDaoImpl");
-		AnnouncementDaoImpl dao3 =(AnnouncementDaoImpl) factory.getBean("announcementDaoImpl");
+//		 ApplicationContext factory = new ClassPathXmlApplicationContext(
+//		 "applicationContext.xml");
+//		 
+//		StudentDaoImpl dao =(StudentDaoImpl) factory.getBean("studentDaoImpl");
+//		TeacherDaoImpl dao1 =(TeacherDaoImpl) factory.getBean("teacherDaoImpl");
+//		UserDaoImpl dao2 =(UserDaoImpl) factory.getBean("userDaoImpl");
+//		AnnouncementDaoImpl dao3 =(AnnouncementDaoImpl) factory.getBean("announcementDaoImpl");
 //		DocumentDaoImpl dao6 =(DocumentDaoImpl) factory.getBean("documentDaoImpl");
 //		PapersDaoImpl dao8 =(PapersDaoImpl) factory.getBean("papersDaoImpl");
 //		Users users = new Users();
@@ -33,13 +33,18 @@ public class Test {
 //		students.setName("ssssssssssssss");
 //		students.setStuNum(123456789);
 //		students.setYears("2017");
-		Teachers teachers = new Teachers();
-		teachers.setName("111");
-		teachers.setPhone("@zhuren");
-		dao1.saveTeacher(teachers);
+//		Teachers teachers = new Teachers();
+//		teachers.setName("111");
+//		teachers.setPhone("@zhuren");
+//		dao1.saveTeacher(teachers);
 //		students.setTeachers(teachers);
 //		dao.saveStu(students);
-		
+		String i = "wwwwww.wwwww";
+		String[] split = i.split("\\.");
+		System.out.println(split.length);
+		for (String string : split) {
+			System.out.println(string);
+		}
 //        Students studentsByNum = dao.getStudentsByNum(123456789);
 //        System.out.println(studentsByNum.getTeachers().getName());
 	}

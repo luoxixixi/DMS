@@ -25,7 +25,7 @@
 		<action name="getAllStu" class="userAction" method="getAllstudent">
 			<result name="success">/student_info_tables.jsp</result>
 		</action>
-		
+
 		<action name="getAllTeacher" class="userAction" method="getAllTeacher">
 			<result name="success">/teacher_info_tables.jsp</result>
 		</action>
@@ -58,6 +58,12 @@
 		</action>
 		<action name="choiceStu" class="userAction" method="choiceStu">
 			<result name="success"></result>
+		</action>
+		<action name="getStu" class="userAction" method="getStu">
+			<result name="success">/stucontacts.jsp</result>
+		</action>
+		<action name="exitSystem" class="userAction" method="exitSystem">
+			<result name="success">/login.jsp</result>
 		</action>
 		<action name="showAllAnn" class="announcementAction" method="showAllAnn">
 			<result name="success"></result>
@@ -117,7 +123,7 @@
 		<action name="getFileByName" class="documentAction" method="getFileByName">
 			<result name="success"></result>
 		</action>
-		<action name="deleteFile"  class="documentAction" method="deletefile"></action>
+		<action name="deleteFile" class="documentAction" method="deletefile"></action>
 		<action name="downLoadFile" class="documentAction" method="downLoadFile">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet_stream</param>
@@ -130,6 +136,12 @@
 			<result name="success"></result>
 		</action>
 		<action name="downZipFile" class="documentAction" method="downZipFile">
+			<result name="success"></result>
+		</action>
+		<action name="deletePDF" class="documentAction" method="deleteFile2">
+			<result name="success"></result>
+		</action>
+		<action name="showFile" class="documentAction" method="showFile">
 			<result name="success"></result>
 		</action>
 		<action name="savemajor" class="majorAction" method="savemajor">

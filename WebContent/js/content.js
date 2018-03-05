@@ -96,17 +96,7 @@ $("#addteacher").click(function() {
 		content: 'addteacher.html'
 	});
 });
-$("#openPDF").click(function() {
-	layer.open({
-		type: 2,
-		title: '预览',
-		shadeClose: true,
-		shade: false,
-		maxmin: true, //开启最大化最小化按钮
-		area: ['893px', '600px'],
-		content: '文件上传示例.pdf'
-	});
-});
+
 $("#hisbutton").click(function() {
 	window.location.href="historyFile";
 	//layer.load();
