@@ -14,6 +14,6 @@ $("#exit").click(function() {
 		btn : [ '是', '否' ]
 	// 按钮
 	}, function() {
-
+		window.location.href="exitSystem";
 	});
 });
