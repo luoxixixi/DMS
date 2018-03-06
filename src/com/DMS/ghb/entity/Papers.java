@@ -5,9 +5,16 @@ import java.io.Serializable;
 public class Papers implements Serializable{
 	private String papersId;
 	private String name;
+	private String message;
 	private Students students;
 	private Mission mission;
 	
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
 	public Mission getMission() {
 		return mission;
 	}

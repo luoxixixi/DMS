@@ -171,6 +171,11 @@
 							time : 2000,
 							icon : 7,
 						});
+					}else if(data=="e"){
+						layer.msg('服务器错误', {
+							time : 2000,
+							icon : 7,
+						});
 					}else{
 						layer.open({
 							type: 2,

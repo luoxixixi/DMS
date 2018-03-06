@@ -8,9 +8,9 @@ public class Mission implements Serializable{
 	private String missionName;
 	private String missionTime;
 	private String missionEndTime;
-	private String missionContent;
-	private String missionType;
-	private String missionStatus;
+	private String missionContent;//说明
+	private String missionType; //1.毕设调查 2. 公司调查
+	private String missionStatus;//0 未答题 1 待审核 2 不合格 3 合格 9 结束
 	private String leavel;
 	private Teachers teachers;
 	private Set<Papers> papers;

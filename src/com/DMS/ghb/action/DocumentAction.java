@@ -285,6 +285,9 @@ public class DocumentAction extends ActionSupport {
 		if (PDFname == null) {
 			HttpUtil.getResponse().getWriter().print("error");
 			return null;
+		}else if (PDFname.equals("e")) {
+			HttpUtil.getResponse().getWriter().print("e");
+			return null;
 		}
 		HttpServletRequest requset = HttpUtil.getRequset();
 		String responseStr = "http://" + requset.getServerName() + ":"

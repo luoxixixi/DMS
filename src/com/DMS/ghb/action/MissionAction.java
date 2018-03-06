@@ -45,6 +45,13 @@ public class MissionAction extends ActionSupport {
 		mission.setMissionEndTime("----/--/--");
 		mission.setMissionStatus("0");
 		mission.setTeachers(teachers);
+		if(teachers.getType().equals("2")){
+			mission.setLeavel("1");
+		}else if (teachers.getType().equals("3")) {
+			mission.setLeavel("2");
+		}else {
+			mission.setLeavel("0");
+		}
 		boolean saveMission = service.saveMission(mission);
 		if (saveMission) {
 			HttpUtil.getResponse().getWriter().print("success");
@@ -90,7 +97,24 @@ public class MissionAction extends ActionSupport {
 		HttpUtil.getRequset().setAttribute("missions", missions);
 		return SUCCESS;
 	}
-
+	/**
+	 * Ω· ¯»ŒŒÒ
+	 * @return
+	 * @throws Exception
+	 */
+	public String endMission()throws Exception{
+		String missionId = HttpUtil.getRequset().getParameter("missionId");
+		Mission mission = service.getMissionById(missionId);
+		mission.setMissionEndTime(TimeUtil.timeNow());
+		mission.setMissionStatus("9");
+		boolean upMission = service.upMission(mission);
+		if (upMission) {
+			HttpUtil.getResponse().getWriter().print("success");
+			return null;
+		}
+		HttpUtil.getResponse().getWriter().print(ERROR);
+		return null;
+	}
 	public MissionSercive getService() {
 		return service;
 	}

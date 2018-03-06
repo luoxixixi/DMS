@@ -11,9 +11,16 @@ public class Documents implements Serializable{
 	private String fileType;// 上传者
 	private String fileStatus;//0 待审核 1 不合格 2 合格 7其他文档 8 教师文档 9 主任文档 
 	private String path;
+	private String message;//审批信息
 	private Users userId;
 
+	public String getMessage() {
+		return message;
+	}
 
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	public String getDocId() {
 		return docId;

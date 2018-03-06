@@ -10,5 +10,10 @@ public interface MissionSercive {
 	public boolean upMission(Mission mission);
 	public boolean deleteMission(Mission mission);
 	public Mission getMissionById(String id);
+	/**
+	 * 参数无意义
+	 * @param users
+	 * @return
+	 */
 	public List<Mission> getMIssionByUser(Teachers users);
 }

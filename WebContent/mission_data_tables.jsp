@@ -1,3 +1,4 @@
+<%@page import="com.DMS.ghb.entity.Users"%>
 <%@page import="com.DMS.ghb.entity.Mission"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -5,7 +6,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%
-List<Mission> missions=(List<Mission>)request.getAttribute("missions");
+	List<Mission> missions=(List<Mission>)request.getAttribute("missions");
+  Users users = (Users)session.getAttribute("suser");
 %>
 <!DOCTYPE html>
 <html>
@@ -33,6 +35,7 @@ List<Mission> missions=(List<Mission>)request.getAttribute("missions");
 </head>
 
 <body class="gray-bg">
+	<input type="text" id="userType" value="<%=users.getType()%>" hidden="">
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
 			<div class="col-sm-12">
@@ -56,17 +59,25 @@ List<Mission> missions=(List<Mission>)request.getAttribute("missions");
 								</tr>
 							</thead>
 							<tbody>
-					 		<c:forEach items="<%=missions%>" var="m">
-								<tr class="gradeX">
-									<td>${m.missionName }</td>
-									<td>${m.teachers.name }</td>
-									<td>${m.missionEndTime }</td>
-									<td>
-										<button type="button" class="btn btn-primary btn-sm">查看</button>
-										<button type="button" class="btn btn-primary btn-sm">结束</button>
-									</td>
-								</tr>
-							</c:forEach>
+								<c:forEach items="<%=missions%>" var="m">
+									<tr class="gradeX">
+										<td>${m.missionName }</td>
+										<td>${m.teachers.name }</td>
+										<td>${m.missionEndTime }</td>
+										<td>
+											<button name="button0" type="button"
+												class="btn btn-primary btn-sm" onclick="answer('${m.missionType}','${m.id}')">作答</button>
+											<button name="button1" type="button"
+												class="btn btn-primary btn-sm" onclick="showMission('${m.id}','${m.missionContent }')">查看</button>
+											<input type="text" hidden="" value="${m.missionStatus==0 }">
+											<c:if test="${m.missionStatus==0 }">
+											
+											<button name="button2" type="button"
+												class="btn btn-primary btn-sm" onclick="endMission(${'m.id'})">结束</button>
+										     </c:if>
+										</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 
 						</table>
@@ -94,6 +105,7 @@ List<Mission> missions=(List<Mission>)request.getAttribute("missions");
 	<!-- Page-Level Scripts -->
 	<script>
 		$(document).ready(function() {
+			init();
 			$('.dataTables-example').dataTable();
 
 			/* Init DataTables */
@@ -124,6 +136,68 @@ List<Mission> missions=(List<Mission>)request.getAttribute("missions");
 							[ "Custom row", "New row", "New row", "New row",
 									"New row" ]);
 
+		}
+		function init() {
+			var userType = $("#userType").val();
+			if (userType == "1") {
+				$("#addmission").remove();
+				var b = $("button[name=button2]");
+				b.each(function(index, element) {
+					element.remove();
+				});
+			} else {
+				var b = $("button[name=button0]");
+				b.each(function(index, element) {
+					element.remove();
+				});
+			}
+
+		}
+		function answer(type,id) {
+			if(type=="1"){
+				window.location.href="mymissionpaper.html?misId="+id;
+			}else if (type=="2") {
+				window.location.href="mymissioncompany.html?misId="+id;
+			}
+		}
+		function showMission(id,mes) {
+			$.ajax({
+				type : "post",
+				url : "/dms/deleteFile",
+				data : {
+					fileName : fileName,
+					fileId : fileId
+				},
+				success : function(data, textStatus) {
+					layer.msg('已删除', {
+						time : 1000,
+						icon : 1,
+						end : function(index, layero) {
+							window.location.reload();
+						}
+					});
+				}
+			})
+
+		}
+		function endMission(id) {
+			$.ajax({
+				type : "post",
+				url : "/dms/deleteFile",
+				data : {
+					fileName : fileName,
+					fileId : fileId
+				},
+				success : function(data, textStatus) {
+					layer.msg('已删除', {
+						time : 1000,
+						icon : 1,
+						end : function(index, layero) {
+							window.location.reload();
+						}
+					});
+				}
+			})
 		}
 	</script>
 

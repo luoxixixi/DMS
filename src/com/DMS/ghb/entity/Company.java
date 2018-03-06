@@ -8,8 +8,17 @@ public class Company implements Serializable {
 	private String address;
 	private String cTeacher;
 	private String cPhonr;
+	private String message;//ÉóÅúĞÅÏ¢
 	private Students stuId;
 	private Mission mission;
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	public Mission getMission() {
 		return mission;

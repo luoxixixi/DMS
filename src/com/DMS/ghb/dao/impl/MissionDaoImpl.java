@@ -25,20 +25,35 @@ public class MissionDaoImpl extends HibernateDaoSupport implements MissionDao {
 
 	@Override
 	public boolean upMission(Mission mission) {
-		// TODO Auto-generated method stub
+		try {
+			getHibernateTemplate().update(mission);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
 	@Override
 	public boolean deleteMission(Mission mission) {
-		// TODO Auto-generated method stub
+		try {
+			getHibernateTemplate().delete(mission);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
 	@Override
 	public Mission getMissionById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Mission mission = getHibernateTemplate().get(Mission.class, id);
+			return mission;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Mission();
 	}
 
 	@Override

@@ -80,15 +80,6 @@
 		<action name="showAnnByUser" class="announcementAction" method="showAnnByUser">
 			<result name="success">/blog.jsp</result>
 		</action>
-		<action name="showAllCls" class="classesAction" method="showAllCls">
-			<result name="success"></result>
-		</action>
-		<action name="saveCls" class="classesAction" method="saveCls">
-			<result name="success"></result>
-		</action>
-		<action name="deleteCls" class="classesAction" method="deleteCls">
-			<result name="success"></result>
-		</action>
 		<action name="saveCom" class="companyAction" method="saveCom">
 			<result name="success"></result>
 		</action>
@@ -99,15 +90,6 @@
 			<result name="success"></result>
 		</action>
 		<action name="exceptCom" class="companyAction" method="except">
-			<result name="success"></result>
-		</action>
-		<action name="savedept" class="departmentAction" method="savedept">
-			<result name="success"></result>
-		</action>
-		<action name="deletedept" class="departmentAction" method="deletedept">
-			<result name="success"></result>
-		</action>
-		<action name="getdept" class="departmentAction" method="getdept">
 			<result name="success"></result>
 		</action>
 		<action name="upFile" class="documentAction" method="fileUpload">
@@ -144,15 +126,6 @@
 		<action name="showFile" class="documentAction" method="showFile">
 			<result name="success"></result>
 		</action>
-		<action name="savemajor" class="majorAction" method="savemajor">
-			<result name="success"></result>
-		</action>
-		<action name="deletema" class="majorAction" method="deletema">
-			<result name="success"></result>
-		</action>
-		<action name="getAll" class="majorAction" method="getAll">
-			<result name="success"></result>
-		</action>
 		<action name="savepaper" class="papersAction" method="savepaper">
 			<result name="success"></result>
 		</action>
@@ -173,6 +146,9 @@
 		</action>
 		<action name="saveMission" class="missionAction" method="saveMission">
 			<result name="success">/getMission</result>
+		</action>
+		<action name="endMission" class="missionAction" method="endMission">
+			<result name="success"></result>
 		</action>
 	</package>
 

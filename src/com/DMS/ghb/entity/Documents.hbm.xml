@@ -29,6 +29,9 @@
         <property name="fileStatus" type="java.lang.String">
             <column name="FILESTATUS" />
         </property>
+        <property name="message" type="java.lang.String">
+            <column name="MESSAGE" />
+        </property>
         <many-to-one name="userId" class="com.DMS.ghb.entity.Users" fetch="join">
             <column name="USERID" />
         </many-to-one>

@@ -6,11 +6,15 @@ import javax.servlet.http.HttpSession;
 import com.DMS.ghb.entity.Company;
 import com.DMS.ghb.entity.Students;
 import com.DMS.ghb.service.CompanyService;
+import com.DMS.ghb.service.MissionSercive;
+import com.DMS.ghb.service.StudentService;
 import com.DMS.ghb.util.HttpUtil;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class CompanyAction extends ActionSupport {
 	private CompanyService service;
+	private MissionSercive missionSercive;
+	private StudentService studentService;
 
 	/**
 	 * 添加实习单位
@@ -89,6 +93,21 @@ public class CompanyAction extends ActionSupport {
 		HttpServletRequest requset = HttpUtil.getRequset();
 		requset.getParameter("");
 		return SUCCESS;
+	}
+	public MissionSercive getMissionSercive() {
+		return missionSercive;
+	}
+
+	public void setMissionSercive(MissionSercive missionSercive) {
+		this.missionSercive = missionSercive;
+	}
+
+	public StudentService getStudentService() {
+		return studentService;
+	}
+
+	public void setStudentService(StudentService studentService) {
+		this.studentService = studentService;
 	}
 
 	public CompanyService getService() {
