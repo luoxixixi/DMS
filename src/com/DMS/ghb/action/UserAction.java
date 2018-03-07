@@ -131,9 +131,11 @@ public class UserAction extends ActionSupport {
 		if (updataUsers) {
 			HttpUtil.getSession().setAttribute("suser", null);
 			HttpUtil.getSession().setAttribute("user", null);
-			return SUCCESS;
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
+			return null;
 		} else {
-			return ERROR;
+			HttpUtil.getResponse().getWriter().print(ERROR);
+			return null;
 		}
 	}
 

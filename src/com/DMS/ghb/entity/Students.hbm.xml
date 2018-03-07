@@ -17,8 +17,8 @@
         <property name="years" type="java.lang.String">
             <column name="YEARS" />
         </property>
-        <many-to-one name="papers" class="com.DMS.ghb.entity.Papers" column="PAPERS" unique="true"></many-to-one>
-        <many-to-one name="company" class="com.DMS.ghb.entity.Company" column="COMPANY" unique="true"></many-to-one>
+        <one-to-one name="papers" class="com.DMS.ghb.entity.Papers" property-ref="students"></one-to-one>
+        <one-to-one name="company" class="com.DMS.ghb.entity.Company" property-ref="stuId"></one-to-one>
         <property name="departments" type="java.lang.String">
             <column name="DEPARTMENTS" />
         </property>

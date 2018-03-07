@@ -86,6 +86,12 @@
 		<action name="changeCom" class="companyAction" method="changeCom">
 			<result name="success"></result>
 		</action>
+		<action name="getCompanyById" class="companyAction" method="getCompanyById">
+			<result name="success">mymissioncompany.jsp</result>
+		</action>
+		<action name="getCompanyByMisson" class="companyAction" method="getCompanyByMisson">
+			<result name="success"></result>
+		</action>
 		<action name="deleteCom" class="companyAction" method="deleteCom">
 			<result name="success"></result>
 		</action>
@@ -132,10 +138,13 @@
 		<action name="getAllpaper" class="papersAction" method="getAllpaper">
 			<result name="success"></result>
 		</action>
+		<action name="getPaperById" class="papersAction" method="getPaperById">
+			<result name="success">mymissionpaper.jsp</result>
+		</action>
 		<action name="deletepaper" class="papersAction" method="deletepaper">
 			<result name="success"></result>
 		</action>
-		<action name="updatePaper" class="papersAction" method="papersAction">
+		<action name="updatePaper" class="papersAction" method="updatePaper">
 			<result name="success"></result>
 		</action>
 		<action name="exportPaper" class="papersAction" method="export">

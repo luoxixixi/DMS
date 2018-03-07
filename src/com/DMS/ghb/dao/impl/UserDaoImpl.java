@@ -44,7 +44,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 	}
 
 	@Override
-	public Users getUserById(long id) {
+	public Users getUserById(String id) {
 		try {
 			Users users = getHibernateTemplate().get(Users.class, id);
 			return users;

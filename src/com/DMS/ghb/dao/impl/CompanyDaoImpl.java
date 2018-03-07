@@ -75,4 +75,15 @@ public class CompanyDaoImpl extends HibernateDaoSupport implements CompanyDao {
 		return null;
 	}
 
+	@Override
+	public Company getCompanyById(String id) {
+		try {
+			Company company = getHibernateTemplate().get(Company.class, id);
+			return company;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

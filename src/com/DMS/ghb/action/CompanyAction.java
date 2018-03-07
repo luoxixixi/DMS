@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.DMS.ghb.entity.Company;
+import com.DMS.ghb.entity.Mission;
 import com.DMS.ghb.entity.Students;
 import com.DMS.ghb.service.CompanyService;
 import com.DMS.ghb.service.MissionSercive;
@@ -26,18 +27,36 @@ public class CompanyAction extends ActionSupport {
 		HttpServletRequest requset = HttpUtil.getRequset();
 		HttpSession session = HttpUtil.getSession();
 		Students students = (Students) session.getAttribute("user");
-		String name = HttpUtil.transForUTF(requset.getParameter("name"));
-		String address = HttpUtil.transForUTF(requset.getParameter("address"));
+		String mId = requset.getParameter("misId");
+		String cname = requset.getParameter("cname");
+		String caddress = requset.getParameter("caddress");
+		String cteacher = requset.getParameter("cteacher");
+		String cphone = requset.getParameter("cphone");
+		Students stuById = studentService.getStuById(students.getStuId());
+		Company company2 = stuById.getCompany();
+		if (company2 != null) {
+			String id = stuById.getCompany().getMission().getId();
+			if (id.equals(mId)) {
+				HttpUtil.getResponse().getWriter().print("cpoy");
+				return null;
+			}
+		}
+		Mission missionById = missionSercive.getMissionById(mId);
 		Company company = new Company();
-		company.setAddress(address);
-		company.setName(name);
-		company.setStuId(students);
+		company.setAddress(caddress);
+		company.setName(cname);
+		company.setcTeacher(cteacher);
+		company.setcPhonr(cphone);
+		company.setMission(missionById);
+		company.setStuId(stuById);
+		company.setMessage("暂无");
 		boolean saveCompany = service.saveCompany(company);
 		if (saveCompany) {
-			return SUCCESS;
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
 		} else {
-			return ERROR;
+			HttpUtil.getResponse().getWriter().print(ERROR);
 		}
+		return null;
 	}
 
 	/**
@@ -48,21 +67,48 @@ public class CompanyAction extends ActionSupport {
 	 */
 	public String changeCom() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		HttpSession session = HttpUtil.getSession();
-		Students students = (Students) session.getAttribute("user");
-		String name = HttpUtil.transForUTF(requset.getParameter("name"));
-		String address = HttpUtil.transForUTF(requset.getParameter("address"));
-		Company company = new Company();
-		company.setAddress(address);
-		company.setName(name);
-		company.setStuId(students);
+		String cId = requset.getParameter("cId");
+		String cname = requset.getParameter("cname");
+		String caddress = requset.getParameter("caddress");
+		String cteacher = requset.getParameter("cteacher");
+		String cphone = requset.getParameter("cphone");
+		Company company = service.getCompanyById(cId);
+		company.setAddress(caddress);
+		company.setName(cname);
+		company.setcTeacher(cteacher);
+		company.setcPhonr(cphone);
 		boolean updataCompany = service.updataCompany(company);
 		if (updataCompany) {
-			return SUCCESS;
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
 		} else {
-			return ERROR;
+			HttpUtil.getResponse().getWriter().print(ERROR);
 		}
+		return null;
+		
 
+	}
+
+	/**
+	 * 学生查看问卷作答
+	 * @return
+	 * @throws Exception
+	 */
+	public String getCompanyById() throws Exception {
+		Students students = (Students) HttpUtil.getSession().getAttribute(
+				"user");
+		Students stuById = studentService.getStuById(students.getStuId());
+		Company company = stuById.getCompany();
+		HttpUtil.getRequset().setAttribute("company", company);
+		return SUCCESS;
+	}
+    /**
+     * 查看问卷所有答案
+     * @return
+     * @throws Exception
+     */
+	public String getCompanyByMisson() throws Exception {
+		
+		return null;
 	}
 
 	/**
@@ -94,6 +140,7 @@ public class CompanyAction extends ActionSupport {
 		requset.getParameter("");
 		return SUCCESS;
 	}
+
 	public MissionSercive getMissionSercive() {
 		return missionSercive;
 	}

@@ -9,7 +9,7 @@ public interface UserService {
 
 	public boolean deleteUsers(Users users);
 
-	public Users getUserById(long id);
+	public Users getUserById(String id);
 
 	public Users getUserByName(String name, String psw);
 

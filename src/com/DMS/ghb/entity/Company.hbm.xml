@@ -23,7 +23,7 @@
         <property name="message" type="java.lang.String">
             <column name="MESSAGE" />
         </property>
-        <one-to-one name="stuId" class="com.DMS.ghb.entity.Students" property-ref="company"></one-to-one>
+        <many-to-one name="stuId" class="com.DMS.ghb.entity.Students" column="STUID" unique="true"></many-to-one>
         <many-to-one name="mission" class="com.DMS.ghb.entity.Mission" fetch="join">
             <column name="MISSIONID" />
         </many-to-one>

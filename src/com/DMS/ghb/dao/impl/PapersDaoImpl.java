@@ -24,6 +24,7 @@ public class PapersDaoImpl extends HibernateDaoSupport implements PapersDao {
 	public boolean updataPapers(Papers papers) {
 		try {
 			getHibernateTemplate().update(papers);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,7 +43,7 @@ public class PapersDaoImpl extends HibernateDaoSupport implements PapersDao {
 	}
 
 	@Override
-	public Papers getPapersById(long id) {
+	public Papers getPapersById(String id) {
 		try {
 			Papers papers = getHibernateTemplate().get(Papers.class, id);
 			return papers;

@@ -32,8 +32,7 @@ public class PapersServiceImpl implements PapersService{
 
 	@Override
 	public Papers getPaperById(String id) {
-		long parseLong = Long.parseLong(id);
-		Papers papersById = dao.getPapersById(parseLong);
+		Papers papersById = dao.getPapersById(id);
 		return papersById;
 	}
 

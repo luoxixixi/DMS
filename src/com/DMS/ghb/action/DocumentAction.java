@@ -3,6 +3,7 @@ package com.DMS.ghb.action;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -166,10 +167,35 @@ public class DocumentAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String getAllFile() throws Exception {
-		List<Documents> files = service.getDocuments();// 查询文件
+		Users user = (Users) HttpUtil.getSession().getAttribute("suser");
+		Users userById = userService.getUserById(user.getUserId());
+		List<Documents> files = new ArrayList<Documents>();
+		Set<Documents> documents = userById.getDocuments();
+		if (documents == null) {
+			documents = new HashSet<Documents>();
+		}
+		System.out.println(documents.size());
+		files.addAll(documents);
+		if (user.getType().equals("3")) {
+
+		} else if (user.getType().equals("2")) {
+			List<Documents> files1 = service.getDocuments();// 查询文件
+			files.addAll(files1);
+		} else if (user.getType().equals("1")) {
+			List<Documents> files1 = service.getDocuments();// 查询文件
+			files.addAll(files1);
+			Students student = studentService.getStudentByNum(Long
+					.parseLong(user.getUserName()));
+			Teachers teachers = student.getTeachers();
+			if(teachers!=null){
+				Users userByName = userService.getUserByName(teachers.getPhone());
+				Set<Documents> documents2 = userByName.getDocuments();
+				files.addAll(documents2);
+			}
+		}
+
 		if (files != null && files.size() > 0) {
 			ServletActionContext.getRequest().setAttribute("files", files);// 数据回传
-			System.out.println(files.get(0).getPath());
 		} else {
 			files = new ArrayList<Documents>();
 			ServletActionContext.getRequest().setAttribute("files", files);// 数据回传
@@ -285,7 +311,7 @@ public class DocumentAction extends ActionSupport {
 		if (PDFname == null) {
 			HttpUtil.getResponse().getWriter().print("error");
 			return null;
-		}else if (PDFname.equals("e")) {
+		} else if (PDFname.equals("e")) {
 			HttpUtil.getResponse().getWriter().print("e");
 			return null;
 		}
@@ -307,8 +333,8 @@ public class DocumentAction extends ActionSupport {
 				"/upload");// 获取真实路径
 		String url = HttpUtil.getRequset().getParameter("req");
 		String[] split = url.split("/");
-		String pdfName= split[split.length-1];
-		File file = new File(root+"/tempPDF/"+pdfName);
+		String pdfName = split[split.length - 1];
+		File file = new File(root + "/tempPDF/" + pdfName);
 		file.delete();
 		return null;
 	}

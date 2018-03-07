@@ -10,4 +10,5 @@ public interface CompanyDao {
 	public boolean deleteCompany(Company company);
 	public Company getComByUser(Company company);
 	public List<Company> getCompaniesAll();
+	public Company getCompanyById(String id);
 }

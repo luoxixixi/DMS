@@ -60,7 +60,7 @@ public class DocumentDaoImpl extends HibernateDaoSupport implements DocumentDao 
 	@Override
 	public List<Documents> getDocumentsAll() {
 		try {
-			String hql = "from Documents";
+			String hql = "from Documents where fileStatus ='9'";
 			List<Documents> documents = (List<Documents>) getHibernateTemplate()
 					.find(hql);
 			if (documents != null && documents.size() > 0) {

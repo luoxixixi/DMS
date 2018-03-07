@@ -66,15 +66,17 @@
 										<td>${m.missionEndTime }</td>
 										<td>
 											<button name="button0" type="button"
-												class="btn btn-primary btn-sm" onclick="answer('${m.missionType}','${m.id}')">作答</button>
+												class="btn btn-primary btn-sm"
+												onclick="answer('${m.missionType}','${m.id}','${m.missionContent }')">作答</button>
 											<button name="button1" type="button"
-												class="btn btn-primary btn-sm" onclick="showMission('${m.id}','${m.missionContent }')">查看</button>
+												class="btn btn-primary btn-sm"
+												onclick="showMission('${m.missionType}','${m.id}','${m.missionContent }')">查看</button>
 											<input type="text" hidden="" value="${m.missionStatus==0 }">
 											<c:if test="${m.missionStatus==0 }">
-											
-											<button name="button2" type="button"
-												class="btn btn-primary btn-sm" onclick="endMission(${'m.id'})">结束</button>
-										     </c:if>
+												<button name="button2" type="button"
+													class="btn btn-primary btn-sm"
+													onclick="endMission(${'m.id'})">结束</button>
+											</c:if>
 										</td>
 									</tr>
 								</c:forEach>
@@ -145,7 +147,18 @@
 				b.each(function(index, element) {
 					element.remove();
 				});
-			} else {
+			} else if (userType == "2") {
+				$("#addmission").remove();
+				var b = $("button[name=button2]");
+				b.each(function(index, element) {
+					element.remove();
+				});
+				var b = $("button[name=button0]");
+				b.each(function(index, element) {
+					element.remove();
+				});
+			}
+			else {
 				var b = $("button[name=button0]");
 				b.each(function(index, element) {
 					element.remove();
@@ -153,48 +166,46 @@
 			}
 
 		}
-		function answer(type,id) {
-			if(type=="1"){
-				window.location.href="mymissionpaper.html?misId="+id;
-			}else if (type=="2") {
-				window.location.href="mymissioncompany.html?misId="+id;
-			}
-		}
-		function showMission(id,mes) {
-			$.ajax({
-				type : "post",
-				url : "/dms/deleteFile",
-				data : {
-					fileName : fileName,
-					fileId : fileId
-				},
-				success : function(data, textStatus) {
-					layer.msg('已删除', {
-						time : 1000,
-						icon : 1,
-						end : function(index, layero) {
-							window.location.reload();
+		function answer(type,id,mes) {
+			layer.open({
+				  title: '任务说明',
+				  content: mes,
+				  yes: function(index, layero){
+					  if(type=="1"){
+							window.location.href="mymissionpaper.html?misId="+id;
+						}else if (type=="2") {
+							window.location.href="mymissioncompany.html?misId="+id;
 						}
-					});
-				}
-			})
-
+					  }
+				});
+			
 		}
+		function showMission(type,id,mes) {
+			layer.open({
+				  title: '任务说明'
+				  ,content: mes,
+				  yes: function(index, layero){
+					  if(type=="1"){
+							window.location.href="getPaperById";
+						}else if (type=="2") {
+							window.location.href="getCompanyById";
+						}
+						
+					  }
+					});  
+
+			}
 		function endMission(id) {
 			$.ajax({
 				type : "post",
-				url : "/dms/deleteFile",
+				url : "/dms/",
 				data : {
-					fileName : fileName,
-					fileId : fileId
+					misId:id
 				},
 				success : function(data, textStatus) {
 					layer.msg('已删除', {
 						time : 1000,
 						icon : 1,
-						end : function(index, layero) {
-							window.location.reload();
-						}
 					});
 				}
 			})

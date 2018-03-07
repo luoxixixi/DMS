@@ -55,4 +55,9 @@ public class CompanyServiceImpl implements CompanyService {
 		return deleteCompany;
 	}
 
+	@Override
+	public Company getCompanyById(String id) {
+		return dao.getCompanyById(id);
+	}
+
 }

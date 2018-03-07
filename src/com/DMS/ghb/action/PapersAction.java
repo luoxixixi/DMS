@@ -27,23 +27,46 @@ public class PapersAction extends ActionSupport {
 		String pTitlt = requset.getParameter("title");
 		String missionId = requset.getParameter("misId");
 		Mission missionById = missionSercive.getMissionById(missionId);
-		Students students = (Students) HttpUtil.getSession().getAttribute("user");
+		Students students = (Students) HttpUtil.getSession().getAttribute(
+				"user");
 		Students stuById = studentService.getStuById(students.getStuId());
 		Papers papers2 = stuById.getPapers();
-		if(papers2!=null){
-			HttpUtil.getResponse().getWriter().print("cpoy");
-			return null;
+		if (papers2 != null) {
+			String id = stuById.getPapers().getMission().getId();
+			if (id.equals(missionId)) {
+				HttpUtil.getResponse().getWriter().print("cpoy");
+				return null;
+			}
 		}
 		Papers papers = new Papers();
 		papers.setName(pTitlt);
 		papers.setMission(missionById);
+		papers.setStudents(stuById);
+		papers.setMessage("暂无");
 		boolean savePaper = service.savePaper(papers);
 		if (savePaper) {
-			stuById.setPapers(papers);
-			boolean updataStudents = studentService.updataStudents(stuById);
-			if (updataStudents) {
-				HttpUtil.getResponse().getWriter().print(SUCCESS);
-			}
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
+		} else {
+			HttpUtil.getResponse().getWriter().print(ERROR);
+		}
+		return null;
+	}
+
+	/**
+	 * 修改
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String updatePaper() throws Exception {
+		HttpServletRequest requset = HttpUtil.getRequset();
+		String id = requset.getParameter("pId");
+		String pTitlt = requset.getParameter("title");
+		Papers paperById = service.getPaperById(id);
+		paperById.setName(pTitlt);
+		boolean updataPaper = service.updataPaper(paperById);
+		if (updataPaper) {
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
 		} else {
 			HttpUtil.getResponse().getWriter().print(ERROR);
 		}
@@ -63,24 +86,29 @@ public class PapersAction extends ActionSupport {
 	}
 
 	/**
+	 * 查看单个问题
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getPaperById() throws Exception {
+		Students students = (Students) HttpUtil.getSession().getAttribute(
+				"user");
+		Students stuById = studentService.getStuById(students.getStuId());
+		Papers papers = stuById.getPapers();
+		System.out.println(papers);
+		HttpUtil.getRequset().setAttribute("papers", papers);
+		return SUCCESS;
+
+	}
+
+	/**
 	 * 删除
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	public String deletepaper() throws Exception {
-		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
-	}
-
-	/**
-	 * 修改
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public String updatePaper() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
 		requset.getParameter("");
 		return SUCCESS;

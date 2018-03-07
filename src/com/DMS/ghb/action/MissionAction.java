@@ -6,11 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import com.DMS.ghb.entity.Announcement;
 import com.DMS.ghb.entity.Mission;
 import com.DMS.ghb.entity.Students;
 import com.DMS.ghb.entity.Teachers;
-import com.DMS.ghb.entity.Users;
 import com.DMS.ghb.service.MissionSercive;
 import com.DMS.ghb.service.StudentService;
 import com.DMS.ghb.service.TeacherService;
@@ -45,11 +43,11 @@ public class MissionAction extends ActionSupport {
 		mission.setMissionEndTime("----/--/--");
 		mission.setMissionStatus("0");
 		mission.setTeachers(teachers);
-		if(teachers.getType().equals("2")){
+		if (teachers.getType().equals("2")) {
 			mission.setLeavel("1");
-		}else if (teachers.getType().equals("3")) {
+		} else if (teachers.getType().equals("3")) {
 			mission.setLeavel("2");
-		}else {
+		} else {
 			mission.setLeavel("0");
 		}
 		boolean saveMission = service.saveMission(mission);
@@ -59,7 +57,7 @@ public class MissionAction extends ActionSupport {
 		}
 		HttpUtil.getResponse().getWriter().print("error");
 		return null;
-		
+
 	}
 
 	/**
@@ -84,9 +82,14 @@ public class MissionAction extends ActionSupport {
 		} else if (type.equals("1")) {
 			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
 					"user");
+			missions = service.getMIssionByUser(null);
+			if (missions == null) {
+				missions = new ArrayList<Mission>();
+			}
 			Set<Mission> mission = teacherService.getTeacerById(
 					teachers.getTeaId()).getMissions();
 			missions.addAll(mission);
+
 		}
 		Collections.sort(missions, new Comparator<Mission>() {
 			@Override
@@ -97,12 +100,14 @@ public class MissionAction extends ActionSupport {
 		HttpUtil.getRequset().setAttribute("missions", missions);
 		return SUCCESS;
 	}
+
 	/**
 	 * Ω· ¯»ŒŒÒ
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public String endMission()throws Exception{
+	public String endMission() throws Exception {
 		String missionId = HttpUtil.getRequset().getParameter("missionId");
 		Mission mission = service.getMissionById(missionId);
 		mission.setMissionEndTime(TimeUtil.timeNow());
@@ -115,6 +120,7 @@ public class MissionAction extends ActionSupport {
 		HttpUtil.getResponse().getWriter().print(ERROR);
 		return null;
 	}
+
 	public MissionSercive getService() {
 		return service;
 	}
