@@ -1,21 +1,36 @@
 package com.DMS.ghb.action;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import com.DMS.ghb.entity.Company;
+import com.DMS.ghb.entity.EntityForExport;
 import com.DMS.ghb.entity.Mission;
+import com.DMS.ghb.entity.Papers;
 import com.DMS.ghb.entity.Students;
+import com.DMS.ghb.entity.Teachers;
+import com.DMS.ghb.entity.Users;
 import com.DMS.ghb.service.CompanyService;
 import com.DMS.ghb.service.MissionSercive;
 import com.DMS.ghb.service.StudentService;
+import com.DMS.ghb.service.TeacherService;
 import com.DMS.ghb.util.HttpUtil;
+import com.DMS.ghb.util.PoiTest;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class CompanyAction extends ActionSupport {
 	private CompanyService service;
 	private MissionSercive missionSercive;
 	private StudentService studentService;
+	private TeacherService teacherService;
+
 
 	/**
 	 * 添加实习单位
@@ -107,8 +122,29 @@ public class CompanyAction extends ActionSupport {
      * @throws Exception
      */
 	public String getCompanyByMisson() throws Exception {
-		
-		return null;
+		HttpServletRequest requset = HttpUtil.getRequset();
+		String missionId = requset.getParameter("mId");
+		Users users = (Users) HttpUtil.getSession().getAttribute("suser");
+		List<Company> companies = new ArrayList<Company>();
+		if(users.getType().equals("2")){//教师
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute("user");
+			Teachers teacerById = teacherService.getTeacerById(teachers.getTeaId());
+			Set<Students> students = teacerById.getStudents();
+			for (Students students2 : students) {
+				 Company company = students2.getCompany();
+				if(company!=null){
+					companies.add(company);
+				}
+			}
+		}else if (users.getType().equals("3")) {
+			 Set<Company> companies2 = missionSercive.getMissionById(missionId).getCompanies();
+			if(companies2!=null){
+				companies.addAll(companies2);
+			}
+		}
+		HttpUtil.getRequset().setAttribute("companies", companies);
+		HttpUtil.getRequset().setAttribute("mId", missionId);
+		return SUCCESS;
 	}
 
 	/**
@@ -129,7 +165,25 @@ public class CompanyAction extends ActionSupport {
 			return ERROR;
 		}
 	}
-
+	/**
+	 * 审批
+	 * @return
+	 * @throws Exception
+	 */
+	public String changeCMessage() throws Exception{
+		String cId = HttpUtil.getRequset().getParameter("cId");
+		String message = HttpUtil.getRequset().getParameter("message");
+		Company companyById = service.getCompanyById(cId);
+		companyById.setMessage(message);
+		boolean updataCompany = service.updataCompany(companyById);
+		if (updataCompany) {
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
+		}else {
+			HttpUtil.getResponse().getWriter().print(ERROR);
+		}
+		return null;
+	}
+	
 	/**
 	 * 实习单位导出
 	 * 
@@ -137,8 +191,38 @@ public class CompanyAction extends ActionSupport {
 	 */
 	public String except() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
-		requset.getParameter("");
-		return SUCCESS;
+		String missionId = requset.getParameter("mId");
+		Users users = (Users) HttpUtil.getSession().getAttribute("suser");
+		List<Company> companies = new ArrayList<Company>();
+		if(users.getType().equals("2")){//教师
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute("user");
+			Teachers teacerById = teacherService.getTeacerById(teachers.getTeaId());
+			Set<Students> students = teacerById.getStudents();
+			for (Students students2 : students) {
+				 Company company = students2.getCompany();
+				if(company!=null){
+					companies.add(company);
+				}
+			}
+		}else if (users.getType().equals("3")) {
+			 Set<Company> companies2 = missionSercive.getMissionById(missionId).getCompanies();
+			if(companies2!=null){
+				companies.addAll(companies2);
+			}
+		}
+		List<EntityForExport> entity = new ArrayList<EntityForExport>();
+		for (Company company : companies) {
+			entity.add(new EntityForExport(company.getStuId(), null, company));
+		}
+		HSSFWorkbook exCompany = PoiTest.exCompany(entity);
+		ServletOutputStream os = HttpUtil.getResponse().getOutputStream();
+		try {
+			exCompany.write(os);
+		} catch (Exception e) {
+		}finally{
+			os.close();
+		}
+		return null;
 	}
 
 	public MissionSercive getMissionSercive() {
@@ -164,4 +248,13 @@ public class CompanyAction extends ActionSupport {
 	public void setService(CompanyService service) {
 		this.service = service;
 	}
+
+	public TeacherService getTeacherService() {
+		return teacherService;
+	}
+
+	public void setTeacherService(TeacherService teacherService) {
+		this.teacherService = teacherService;
+	}
+	
 }

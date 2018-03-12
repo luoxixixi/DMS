@@ -86,10 +86,6 @@ public class MissionAction extends ActionSupport {
 			if (missions == null) {
 				missions = new ArrayList<Mission>();
 			}
-			Set<Mission> mission = teacherService.getTeacerById(
-					teachers.getTeaId()).getMissions();
-			missions.addAll(mission);
-
 		}
 		Collections.sort(missions, new Comparator<Mission>() {
 			@Override

@@ -90,9 +90,12 @@
 			<result name="success">mymissioncompany.jsp</result>
 		</action>
 		<action name="getCompanyByMisson" class="companyAction" method="getCompanyByMisson">
-			<result name="success"></result>
+			<result name="success">mission_info_company.jsp</result>
 		</action>
 		<action name="deleteCom" class="companyAction" method="deleteCom">
+			<result name="success"></result>
+		</action>
+		<action name="changeCMessage" class="companyAction" method="changeCMessage">
 			<result name="success"></result>
 		</action>
 		<action name="exceptCom" class="companyAction" method="except">
@@ -136,7 +139,7 @@
 			<result name="success"></result>
 		</action>
 		<action name="getAllpaper" class="papersAction" method="getAllpaper">
-			<result name="success"></result>
+			<result name="success">mission_info_paper.jsp</result>
 		</action>
 		<action name="getPaperById" class="papersAction" method="getPaperById">
 			<result name="success">mymissionpaper.jsp</result>
@@ -145,6 +148,9 @@
 			<result name="success"></result>
 		</action>
 		<action name="updatePaper" class="papersAction" method="updatePaper">
+			<result name="success"></result>
+		</action>
+		<action name="changePMessage" class="papersAction" method="changePMessage">
 			<result name="success"></result>
 		</action>
 		<action name="exportPaper" class="papersAction" method="export">

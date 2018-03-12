@@ -27,6 +27,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.DMS.ghb.entity.EntityForExport;
+
 /**
  * 读取Excel
  * 
@@ -37,7 +39,7 @@ public class PoiTest {
 	private Sheet sheet;
 	private Row row;
 
-	public PoiTest(String filepath,InputStream is) {
+	public PoiTest(String filepath, InputStream is) {
 		if (filepath == null) {
 			return;
 		}
@@ -156,117 +158,103 @@ public class PoiTest {
 		}
 		return cellvalue;
 	}
-	
-	 //将生成好的Excel文件，放到硬盘上
 
-    public void writeToDisk()
-    {
+	/**
+	 * 导出学生实习单位
+	 * 
+	 * @param entity
+	 * 
+	 * @return
+	 */
+	public static HSSFWorkbook exCompany(List<EntityForExport> entity) {
+		HSSFWorkbook wb = new HSSFWorkbook();
+		// 生成一个sheet1
+		HSSFSheet sheet = wb.createSheet("sheet1");
+		// 为sheet1生成第一行，用于放表头信息
+		HSSFRow row = sheet.createRow(0);
+		// 第一行的第一个单元格的值为 ‘序号’
+		row.createCell(0).setCellValue("学号");
+		row.createCell(1).setCellValue("姓名");
+		row.createCell(2).setCellValue("专业");
+		row.createCell(3).setCellValue("班级");
+		row.createCell(4).setCellValue("实习单位");
+		row.createCell(5).setCellValue("地址");
+		row.createCell(6).setCellValue("实习单位老师");
+		row.createCell(7).setCellValue("实习单位联系电话");
+		// 获得List中的数据，并将数据放到Excel中
+		for (int i = 0; i < entity.size(); i++) {
+			EntityForExport e = entity.get(i);
+			HSSFRow dataRow = sheet.createRow(i+1);
+			dataRow.createCell(0).setCellValue(e.getStudents().getStuNum());
+			dataRow.createCell(1).setCellValue(e.getStudents().getName());
+			dataRow.createCell(2).setCellValue(e.getStudents().getMajor());
+			dataRow.createCell(3).setCellValue(e.getStudents().getClasses());
+			dataRow.createCell(4).setCellValue(e.getCompany().getName());
+			dataRow.createCell(5).setCellValue(e.getCompany().getAddress());
+			dataRow.createCell(6).setCellValue(e.getCompany().getcTeacher());
+			dataRow.createCell(7).setCellValue(e.getCompany().getcPhonr());
+		}
+		return wb;
+	}
 
-        HSSFWorkbook wb = new HSSFWorkbook();
-        //生成一个sheet1
-        HSSFSheet sheet = wb.createSheet("sheet1");
-        //为sheet1生成第一行，用于放表头信息
-        HSSFRow row = sheet.createRow(0);
-        
-        //第一行的第一个单元格的值为  ‘序号’
-        HSSFCell cell = row.createCell(0);
-        cell.setCellValue("序号");
-        
-        cell = row.createCell(1);
-        cell.setCellValue("姓");
-        
-        cell = row.createCell(2);
-        cell.setCellValue("名");
-        
-        cell = row.createCell(3);
-        cell.setCellValue("年龄");
-        
-        
-        //获得List中的数据，并将数据放到Excel中
-
-        for(int i=0;i<161;i++)
-        {
-         //   User user = list.get(i);
-
-           //数据每增加一行，表格就再生成一行             
-
-            row = sheet.createRow(i+1);
-            //第一个单元格，放序号随着i的增加而增加           
-
-            cell = row.createCell(0);
-            cell.setCellValue(i+1);
-            //第二个单元格放firstname
-            cell = row.createCell(1);
-            cell.setCellValue(i+1);
-            //第三个单元格放lastname
-            cell = row.createCell(2);
-            cell.setCellValue(i+1);
-            //第四个单元格放age
-            cell = row.createCell(3);
-            cell.setCellValue(i+1);
-            
-        }
-        
-        
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        try
-        {
-            wb.write(os);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        
-        byte[] content = os.toByteArray();
-        
-        File file = new File("E:/text.xls");//Excel文件生成后存储的位置。
-        
-        OutputStream fos  = null;
-        
-        try
-        {
-            fos = new FileOutputStream(file);
-            
-            fos.write(content);
-
-            os.close();
-
-            fos.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }          
-    }    
-
-//	public static void main(String[] args) {
-//		
-//		try {
-//			String filepath = "C:\\Users\\Administrator.WRPBCXIJRRWCOTY\\Desktop\\2017温州出院患者调查-11月电访(非01)_201711141140 - 副本.xlsx";
-//			PoiTest excelReader = new PoiTest(filepath);
-//			//excelReader.writeToDisk();
-//			System.out.println("-----------------");
-//			// 对读取Excel表格标题测试
-//			// String[] title = excelReader.readExcelTitle();
-//			// System.out.println("获得Excel表格的标题:");
-//			// for (String s : title) {
-//			// System.out.print(s + " ");
-//			// }
-//
-//			// 对读取Excel表格内容测试
-//			Map<Integer, Map<Integer, Object>> map = excelReader
-//					.readExcelContent();
-//			System.out.println("获得Excel表格的内容:");
-//			for (int i = 1; i <= map.size(); i++) {
-//				System.out.println(map.get(i));
-//			}
-//			System.out.println(map.size());
-//		} catch (FileNotFoundException e) {
-//			System.out.println("未找到指定路径的文件!");
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	/**
+	 * 导出学生实习论文题目
+	 * 
+	 * @param entity
+	 * 
+	 * @return
+	 */
+	public static HSSFWorkbook exPaper(List<EntityForExport> entity) {
+		HSSFWorkbook wb = new HSSFWorkbook();
+		// 生成一个sheet1
+		HSSFSheet sheet = wb.createSheet("sheet1");
+		// 为sheet1生成第一行，用于放表头信息
+		HSSFRow row = sheet.createRow(0);
+		// 第一行的第一个单元格的值为 ‘序号’
+		row.createCell(0).setCellValue("学号");
+		row.createCell(1).setCellValue("姓名");
+		row.createCell(2).setCellValue("专业");
+		row.createCell(3).setCellValue("班级");
+		row.createCell(4).setCellValue("毕业论文名称");
+		for (int i = 0; i < entity.size(); i++) {
+			EntityForExport e = entity.get(i);
+			HSSFRow dataRow = sheet.createRow(i+1);
+			dataRow.createCell(0).setCellValue(e.getStudents().getStuNum());
+			dataRow.createCell(1).setCellValue(e.getStudents().getName());
+			dataRow.createCell(2).setCellValue(e.getStudents().getMajor());
+			dataRow.createCell(3).setCellValue(e.getStudents().getClasses());
+			dataRow.createCell(4).setCellValue(e.getPapers().getName());
+		}
+		return wb;
+	}
+	// public static void main(String[] args) {
+	//
+	// try {
+	// String filepath =
+	// "C:\\Users\\Administrator.WRPBCXIJRRWCOTY\\Desktop\\2017温州出院患者调查-11月电访(非01)_201711141140 - 副本.xlsx";
+	// PoiTest excelReader = new PoiTest(filepath);
+	// //excelReader.writeToDisk();
+	// System.out.println("-----------------");
+	// // 对读取Excel表格标题测试
+	// // String[] title = excelReader.readExcelTitle();
+	// // System.out.println("获得Excel表格的标题:");
+	// // for (String s : title) {
+	// // System.out.print(s + " ");
+	// // }
+	//
+	// // 对读取Excel表格内容测试
+	// Map<Integer, Map<Integer, Object>> map = excelReader
+	// .readExcelContent();
+	// System.out.println("获得Excel表格的内容:");
+	// for (int i = 1; i <= map.size(); i++) {
+	// System.out.println(map.get(i));
+	// }
+	// System.out.println(map.size());
+	// } catch (FileNotFoundException e) {
+	// System.out.println("未找到指定路径的文件!");
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 }

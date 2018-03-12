@@ -181,18 +181,34 @@
 			
 		}
 		function showMission(type,id,mes) {
-			layer.open({
-				  title: '任务说明'
-				  ,content: mes,
-				  yes: function(index, layero){
-					  if(type=="1"){
-							window.location.href="getPaperById";
-						}else if (type=="2") {
-							window.location.href="getCompanyById";
-						}
-						
-					  }
-					});  
+			var userType = $("#userType").val();
+			if(userType == "1"){
+				layer.open({
+					  title: '任务说明',
+					  content: mes,
+					  yes: function(index, layero){
+						  if(type=="1"){
+								window.location.href="getPaperById";
+							}else if (type=="2") {
+								window.location.href="getCompanyById";
+							}
+							
+						  }
+						});  
+			}else {
+				layer.open({
+					  title: '任务说明'
+					  ,content: mes,
+					  yes: function(index, layero){
+						  if(type=="1"){
+								window.location.href="getAllpaper?mId="+id;
+							}else if (type=="2") {
+								window.location.href="getCompanyByMisson?mId="+id;
+							}
+						  }
+						});  
+			}
+			
 
 			}
 		function endMission(id) {
@@ -203,7 +219,7 @@
 					misId:id
 				},
 				success : function(data, textStatus) {
-					layer.msg('已删除', {
+					layer.msg('已结束', {
 						time : 1000,
 						icon : 1,
 					});

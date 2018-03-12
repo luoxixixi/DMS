@@ -140,6 +140,7 @@
 		<property name="service" ref="companyServiceImpl"></property>
 		<property name="missionSercive" ref="missionServiceImpl"></property>
 		<property name="studentService" ref="studentServiceImpl"></property>
+		<property name="teacherService" ref="teacherServiceImpl"></property>
 	</bean>
 	<bean id="documentAction" class="com.DMS.ghb.action.DocumentAction">
 		<property name="service" ref="documentServiceImpl"></property>
@@ -150,6 +151,7 @@
 		<property name="service" ref="papersServiceImpl"></property>
 		<property name="missionSercive" ref="missionServiceImpl"></property>
 		<property name="studentService" ref="studentServiceImpl"></property>
+		<property name="teacherService" ref="teacherServiceImpl"></property>
 	</bean>
 	<bean id="missionAction" class="com.DMS.ghb.action.MissionAction">
 		<property name="service" ref="missionServiceImpl"></property>
