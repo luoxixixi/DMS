@@ -188,9 +188,9 @@
 					  content: mes,
 					  yes: function(index, layero){
 						  if(type=="1"){
-								window.location.href="getPaperById";
+								window.location.href="getPaperById?misId="+id;
 							}else if (type=="2") {
-								window.location.href="getCompanyById";
+								window.location.href="getCompanyById?misId="+id;
 							}
 							
 						  }

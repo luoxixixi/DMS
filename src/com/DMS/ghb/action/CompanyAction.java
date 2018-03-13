@@ -31,7 +31,6 @@ public class CompanyAction extends ActionSupport {
 	private StudentService studentService;
 	private TeacherService teacherService;
 
-
 	/**
 	 * 添加实习单位
 	 * 
@@ -48,13 +47,10 @@ public class CompanyAction extends ActionSupport {
 		String cteacher = requset.getParameter("cteacher");
 		String cphone = requset.getParameter("cphone");
 		Students stuById = studentService.getStuById(students.getStuId());
-		Company company2 = stuById.getCompany();
-		if (company2 != null) {
-			String id = stuById.getCompany().getMission().getId();
-			if (id.equals(mId)) {
-				HttpUtil.getResponse().getWriter().print("cpoy");
-				return null;
-			}
+		Company stuCompany = service.getStuCompany(stuById.getStuId(), mId);
+		if (stuCompany != null) {
+			HttpUtil.getResponse().getWriter().print("cpoy");
+			return null;
 		}
 		Mission missionById = missionSercive.getMissionById(mId);
 		Company company = new Company();
@@ -99,46 +95,53 @@ public class CompanyAction extends ActionSupport {
 			HttpUtil.getResponse().getWriter().print(ERROR);
 		}
 		return null;
-		
 
 	}
 
 	/**
 	 * 学生查看问卷作答
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	public String getCompanyById() throws Exception {
 		Students students = (Students) HttpUtil.getSession().getAttribute(
 				"user");
+		String mId = HttpUtil.getRequset().getParameter("misId");
 		Students stuById = studentService.getStuById(students.getStuId());
-		Company company = stuById.getCompany();
+		Company company = service.getStuCompany(stuById.getStuId(), mId);
 		HttpUtil.getRequset().setAttribute("company", company);
 		return SUCCESS;
 	}
-    /**
-     * 查看问卷所有答案
-     * @return
-     * @throws Exception
-     */
+
+	/**
+	 * 查看问卷所有答案
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public String getCompanyByMisson() throws Exception {
 		HttpServletRequest requset = HttpUtil.getRequset();
 		String missionId = requset.getParameter("mId");
 		Users users = (Users) HttpUtil.getSession().getAttribute("suser");
 		List<Company> companies = new ArrayList<Company>();
-		if(users.getType().equals("2")){//教师
-			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute("user");
-			Teachers teacerById = teacherService.getTeacerById(teachers.getTeaId());
+		if (users.getType().equals("2")) {// 教师
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+					"user");
+			Teachers teacerById = teacherService.getTeacerById(teachers
+					.getTeaId());
 			Set<Students> students = teacerById.getStudents();
 			for (Students students2 : students) {
-				 Company company = students2.getCompany();
-				if(company!=null){
+				Company company = service.getStuCompany(students2.getStuId(),
+						missionId);
+				if (company != null) {
 					companies.add(company);
 				}
 			}
-		}else if (users.getType().equals("3")) {
-			 Set<Company> companies2 = missionSercive.getMissionById(missionId).getCompanies();
-			if(companies2!=null){
+		} else if (users.getType().equals("3")) {
+			Set<Company> companies2 = missionSercive.getMissionById(missionId)
+					.getCompanies();
+			if (companies2 != null) {
 				companies.addAll(companies2);
 			}
 		}
@@ -165,12 +168,14 @@ public class CompanyAction extends ActionSupport {
 			return ERROR;
 		}
 	}
+
 	/**
 	 * 审批
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public String changeCMessage() throws Exception{
+	public String changeCMessage() throws Exception {
 		String cId = HttpUtil.getRequset().getParameter("cId");
 		String message = HttpUtil.getRequset().getParameter("message");
 		Company companyById = service.getCompanyById(cId);
@@ -178,12 +183,12 @@ public class CompanyAction extends ActionSupport {
 		boolean updataCompany = service.updataCompany(companyById);
 		if (updataCompany) {
 			HttpUtil.getResponse().getWriter().print(SUCCESS);
-		}else {
+		} else {
 			HttpUtil.getResponse().getWriter().print(ERROR);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 实习单位导出
 	 * 
@@ -194,19 +199,23 @@ public class CompanyAction extends ActionSupport {
 		String missionId = requset.getParameter("mId");
 		Users users = (Users) HttpUtil.getSession().getAttribute("suser");
 		List<Company> companies = new ArrayList<Company>();
-		if(users.getType().equals("2")){//教师
-			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute("user");
-			Teachers teacerById = teacherService.getTeacerById(teachers.getTeaId());
+		if (users.getType().equals("2")) {// 教师
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+					"user");
+			Teachers teacerById = teacherService.getTeacerById(teachers
+					.getTeaId());
 			Set<Students> students = teacerById.getStudents();
 			for (Students students2 : students) {
-				 Company company = students2.getCompany();
-				if(company!=null){
+				Company company = service.getStuCompany(students2.getStuId(),
+						missionId);
+				if (company != null) {
 					companies.add(company);
 				}
 			}
-		}else if (users.getType().equals("3")) {
-			 Set<Company> companies2 = missionSercive.getMissionById(missionId).getCompanies();
-			if(companies2!=null){
+		} else if (users.getType().equals("3")) {
+			Set<Company> companies2 = missionSercive.getMissionById(missionId)
+					.getCompanies();
+			if (companies2 != null) {
 				companies.addAll(companies2);
 			}
 		}
@@ -219,7 +228,7 @@ public class CompanyAction extends ActionSupport {
 		try {
 			exCompany.write(os);
 		} catch (Exception e) {
-		}finally{
+		} finally {
 			os.close();
 		}
 		return null;
@@ -256,5 +265,5 @@ public class CompanyAction extends ActionSupport {
 	public void setTeacherService(TeacherService teacherService) {
 		this.teacherService = teacherService;
 	}
-	
+
 }

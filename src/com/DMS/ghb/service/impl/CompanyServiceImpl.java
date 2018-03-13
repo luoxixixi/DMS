@@ -60,4 +60,9 @@ public class CompanyServiceImpl implements CompanyService {
 		return dao.getCompanyById(id);
 	}
 
+	@Override
+	public Company getStuCompany(String stuId, String mId) {
+		return dao.getStuCompany(stuId, mId);
+	}
+
 }

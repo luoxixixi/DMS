@@ -86,4 +86,23 @@ public class CompanyDaoImpl extends HibernateDaoSupport implements CompanyDao {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Company getStuCompany(String stuId, String mId) {
+		try {
+			String SQL = "select c.companyId "
+					+ "from Company c,Students s, Mission m "
+					+ "where s.stuId=? and m.id=? "
+					+ "and c.stuId.stuId=s.stuId "
+					+ "and c.mission.id=m.id";
+			List<String> id = (List<String>) getHibernateTemplate().find(SQL, stuId,mId);
+			if(id!=null&&id.size()>0){
+				return getCompanyById(id.get(0));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

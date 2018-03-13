@@ -57,4 +57,9 @@ public class PapersServiceImpl implements PapersService{
 		return deletePapers;
 	}
 
+	@Override
+	public Papers getStuPaper(String stuId, String mId) {
+		return dao.getStuPaper(stuId, mId);
+	}
+
 }

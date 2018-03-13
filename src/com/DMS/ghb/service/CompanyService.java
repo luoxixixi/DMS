@@ -11,4 +11,5 @@ public interface CompanyService {
 	public Company getCompanyById(String id);
 	public boolean updataCompany(Company major);
 	public boolean deleteCompany(Company major);
+	public Company getStuCompany(String stuId,String mId);
 }

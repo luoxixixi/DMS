@@ -90,7 +90,15 @@ public class MissionAction extends ActionSupport {
 		Collections.sort(missions, new Comparator<Mission>() {
 			@Override
 			public int compare(Mission o1, Mission o2) {
-				return o2.getMissionTime().compareTo(o1.getMissionTime());
+				long l = TimeUtil.getLongTime(o1.getMissionTime())
+						- TimeUtil.getLongTime(o2.getMissionTime());
+				int j = 0;
+				if (l > 0) {
+					j = 1;
+				} else if (l < 0) {
+					j = -1;
+				}
+				return 1;
 			}
 		});
 		HttpUtil.getRequset().setAttribute("missions", missions);

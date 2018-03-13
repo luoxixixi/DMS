@@ -11,4 +11,5 @@ public interface PapersDao {
 	public Papers getPapersById(String id);
 	public List<Papers> getPapersAll();
 	public List<Papers> getPapersByUSer(long stuId);
+	public Papers getStuPaper(String stuId,String mId);
 }

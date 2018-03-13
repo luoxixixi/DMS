@@ -11,4 +11,5 @@ public interface CompanyDao {
 	public Company getComByUser(Company company);
 	public List<Company> getCompaniesAll();
 	public Company getCompanyById(String id);
+	public Company getStuCompany(String stuId,String mId);
 }

@@ -3,29 +3,31 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2018-3-1 10:15:58 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.DMS.ghb.entity.Company" table="COMPANY">
-        <id name="companyId" type="java.lang.String">
-            <column name="COMPANYID" />
-            <generator class="uuid" />
-        </id>
-        <property name="name" type="java.lang.String">
-            <column name="NAME" />
-        </property>
-        <property name="address" type="java.lang.String">
-            <column name="ADDRESS" />
-        </property>
-        <property name="cTeacher" type="java.lang.String" access="field">
-            <column name="CTEACHER" />
-        </property>
-        <property name="cPhonr" type="java.lang.String" access="field">
-            <column name="CPHONR" />
-        </property>
-        <property name="message" type="java.lang.String">
-            <column name="MESSAGE" />
-        </property>
-        <many-to-one name="stuId" class="com.DMS.ghb.entity.Students" column="STUID" unique="true"></many-to-one>
-        <many-to-one name="mission" class="com.DMS.ghb.entity.Mission" fetch="join">
-            <column name="MISSIONID" />
-        </many-to-one>
-    </class>
+	<class name="com.DMS.ghb.entity.Company" table="COMPANY">
+		<id name="companyId" type="java.lang.String">
+			<column name="COMPANYID" />
+			<generator class="uuid" />
+		</id>
+		<property name="name" type="java.lang.String">
+			<column name="NAME" />
+		</property>
+		<property name="address" type="java.lang.String">
+			<column name="ADDRESS" />
+		</property>
+		<property name="cTeacher" type="java.lang.String" access="field">
+			<column name="CTEACHER" />
+		</property>
+		<property name="cPhonr" type="java.lang.String" access="field">
+			<column name="CPHONR" />
+		</property>
+		<property name="message" type="java.lang.String">
+			<column name="MESSAGE" />
+		</property>
+		<many-to-one name="stuId" class="com.DMS.ghb.entity.Students"
+			column="STUID" fetch="join"></many-to-one>
+		<many-to-one name="mission" class="com.DMS.ghb.entity.Mission"
+			fetch="join">
+			<column name="MISSIONID" />
+		</many-to-one>
+	</class>
 </hibernate-mapping>

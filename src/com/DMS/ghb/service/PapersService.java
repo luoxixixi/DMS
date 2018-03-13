@@ -11,4 +11,5 @@ public interface PapersService {
 	public List<Papers> getPaper();
 	public boolean updataPaper(Papers paper);
 	public boolean deletePaper(Papers paper);
+	public Papers getStuPaper(String stuId,String mId);
 }

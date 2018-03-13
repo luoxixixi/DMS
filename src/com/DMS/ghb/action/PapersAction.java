@@ -44,13 +44,10 @@ public class PapersAction extends ActionSupport {
 		Students students = (Students) HttpUtil.getSession().getAttribute(
 				"user");
 		Students stuById = studentService.getStuById(students.getStuId());
-		Papers papers2 = stuById.getPapers();
+		Papers papers2 = service.getStuPaper(stuById.getStuId(), missionId);
 		if (papers2 != null) {
-			String id = stuById.getPapers().getMission().getId();
-			if (id.equals(missionId)) {
-				HttpUtil.getResponse().getWriter().print("cpoy");
-				return null;
-			}
+			HttpUtil.getResponse().getWriter().print("cpoy");
+			return null;
 		}
 		Papers papers = new Papers();
 		papers.setName(pTitlt);
@@ -105,8 +102,7 @@ public class PapersAction extends ActionSupport {
 					.getTeaId());
 			Set<Students> students = teacerById.getStudents();
 			for (Students students2 : students) {
-				Papers papers2 = students2.getPapers();
-				// TODO 添加到list返回
+				Papers papers2 = service.getStuPaper(students2.getStuId(), missionId);
 				if (papers2 != null) {
 					papers.add(papers2);
 				}
@@ -133,8 +129,9 @@ public class PapersAction extends ActionSupport {
 	public String getPaperById() throws Exception {
 		Students students = (Students) HttpUtil.getSession().getAttribute(
 				"user");
+		String mId = HttpUtil.getRequset().getParameter("misId");
 		Students stuById = studentService.getStuById(students.getStuId());
-		Papers papers = stuById.getPapers();
+		Papers papers = service.getStuPaper(stuById.getStuId(), mId);
 		System.out.println(papers);
 		HttpUtil.getRequset().setAttribute("papers", papers);
 		return SUCCESS;
@@ -191,8 +188,7 @@ public class PapersAction extends ActionSupport {
 					.getTeaId());
 			Set<Students> students = teacerById.getStudents();
 			for (Students students2 : students) {
-				Papers papers2 = students2.getPapers();
-				// TODO 添加到list返回
+				Papers papers2 = service.getStuPaper(students2.getStuId(), missionId);
 				if (papers2 != null) {
 					papers.add(papers2);
 				}
@@ -214,7 +210,7 @@ public class PapersAction extends ActionSupport {
 		try {
 			exPaper.write(os);
 		} catch (Exception e) {
-		}finally{
+		} finally {
 			os.close();
 		}
 		return null;
