@@ -146,6 +146,7 @@
 		<property name="service" ref="documentServiceImpl"></property>
 		<property name="studentService" ref="studentServiceImpl"></property>
 		<property name="userService" ref="userServiceImpl"></property>
+		<property name="teacherService" ref="teacherServiceImpl"></property>
 	</bean>
 	<bean id="papersAction" class="com.DMS.ghb.action.PapersAction">
 		<property name="service" ref="papersServiceImpl"></property>

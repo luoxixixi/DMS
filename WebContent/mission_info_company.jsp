@@ -238,6 +238,7 @@
 			var m=myDate.getMinutes();     //获取当前分钟数(0-59)
 			var s=myDate.getSeconds();  
 			var now=year+p(month)+p(date)+p(h)+p(m)+p(s);
+			return now;
 		}
 	</script>
 

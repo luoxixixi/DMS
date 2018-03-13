@@ -158,7 +158,7 @@
 			});
 		}
 		function showFile(id){
-			layer.load();
+		layer.load();
 			$.ajax({
 				type : "post",
 				url : "/dms/showFile",
@@ -166,26 +166,26 @@
 					docId : id
 				},
 				success : function(data, textStatus) {
-					if(data=="error"){
+					if (data == "error") {
 						layer.msg('暂不支持该格式请下载后查看', {
 							time : 2000,
 							icon : 7,
 						});
-					}else if(data=="e"){
+					} else if (data == "e") {
 						layer.msg('服务器错误', {
 							time : 2000,
 							icon : 7,
 						});
-					}else{
+					} else {
 						layer.open({
-							type: 2,
-							title: '预览',
-							shadeClose: true,
-							shade: false,
-							maxmin: true, //开启最大化最小化按钮
-							area: ['880px', '550px'],
-							content: data,
-							cancel: function(){ 
+							type : 2,
+							title : '预览',
+							shadeClose : true,
+							shade : false,
+							maxmin : true, //开启最大化最小化按钮
+							area : [ '880px', '550px' ],
+							content : data,
+							cancel : function() {
 								$.ajax({
 									type : "post",
 									url : "/dms/deletePDF",
@@ -193,12 +193,12 @@
 										req : data
 									}
 								});
-								  }
+							}
 						});
 					}
 					layer.closeAll("loading");
 				},
-				
+
 			})
 		}
 	</script>

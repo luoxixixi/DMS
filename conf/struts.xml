@@ -135,6 +135,12 @@
 		<action name="showFile" class="documentAction" method="showFile">
 			<result name="success"></result>
 		</action>
+		<action name="checkFile" class="documentAction" method="checkFile">
+			<result name="success"></result>
+		</action>
+		<action name="getMyFile" class="documentAction" method="getMyFile">
+			<result name="success">file_info_tables.jsp</result>
+		</action>
 		<action name="savepaper" class="papersAction" method="savepaper">
 			<result name="success"></result>
 		</action>

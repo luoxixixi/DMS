@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.tomcat.jni.User;
 
 import com.DMS.ghb.entity.Documents;
 import com.DMS.ghb.entity.Students;
@@ -19,9 +20,11 @@ import com.DMS.ghb.entity.Teachers;
 import com.DMS.ghb.entity.Users;
 import com.DMS.ghb.service.DocumentService;
 import com.DMS.ghb.service.StudentService;
+import com.DMS.ghb.service.TeacherService;
 import com.DMS.ghb.service.UserService;
 import com.DMS.ghb.util.Doc2HtmlUtil;
 import com.DMS.ghb.util.HttpUtil;
+import com.DMS.ghb.util.OtherUtils;
 import com.DMS.ghb.util.PoiTest;
 import com.DMS.ghb.util.ZIPUtil;
 import com.opensymphony.xwork2.ActionSupport;
@@ -30,6 +33,7 @@ public class DocumentAction extends ActionSupport {
 	private DocumentService service;
 	private UserService userService;
 	private StudentService studentService;
+	private TeacherService teacherService;
 
 	private FileInputStream fileInputStream;
 
@@ -174,7 +178,6 @@ public class DocumentAction extends ActionSupport {
 		if (documents == null) {
 			documents = new HashSet<Documents>();
 		}
-		System.out.println(documents.size());
 		files.addAll(documents);
 		if (user.getType().equals("3")) {
 
@@ -187,8 +190,9 @@ public class DocumentAction extends ActionSupport {
 			Students student = studentService.getStudentByNum(Long
 					.parseLong(user.getUserName()));
 			Teachers teachers = student.getTeachers();
-			if(teachers!=null){
-				Users userByName = userService.getUserByName(teachers.getPhone());
+			if (teachers != null) {
+				Users userByName = userService.getUserByName(teachers
+						.getPhone());
 				Set<Documents> documents2 = userByName.getDocuments();
 				files.addAll(documents2);
 			}
@@ -212,7 +216,6 @@ public class DocumentAction extends ActionSupport {
 	public String getFileByName() throws Exception {
 		String search = ServletActionContext.getRequest().getParameter("type");// 获取页面数据
 		String select = new String(search.getBytes("ISO8859-1"), "UTF-8");// 编码
-		System.out.println(select);
 		Documents files = new Documents();
 		files.setFileName(select);
 		List<Documents> byName = service.getByName(files);// 查询
@@ -231,8 +234,6 @@ public class DocumentAction extends ActionSupport {
 		String fileName = document.getFileContentType();
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
-		System.out.println(root);
-		System.out.println(fileName);
 		fileInputStream = new FileInputStream(root + "/" + path + "/"
 				+ fileName);// 或得文件输入流
 		return SUCCESS;
@@ -253,11 +254,9 @@ public class DocumentAction extends ActionSupport {
 
 		Documents documentsById = service.getDocumentsById(fileId);
 		boolean deleteDocuments = service.deleteDocuments(documentsById);
-		System.out.println(deleteDocuments);
 		if (deleteDocuments) {
 			String path = root + "\\" + documentsById.getPath() + "\\"
 					+ documentsById.getFileContentType();
-			System.out.println(path);
 			File file = new File(path);
 			boolean delete = file.delete();
 			if (delete) {
@@ -289,6 +288,7 @@ public class DocumentAction extends ActionSupport {
 	}
 
 	/**
+	 * 文件在线浏览
 	 * 
 	 * @return
 	 * @throws Exception
@@ -296,7 +296,6 @@ public class DocumentAction extends ActionSupport {
 	public String showFile() throws Exception {
 		String docId = HttpUtil.getRequset().getParameter("docId");
 		Documents documentsById = service.getDocumentsById(docId);
-
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
 		String path = root + "\\" + documentsById.getPath() + "\\"
@@ -306,11 +305,19 @@ public class DocumentAction extends ActionSupport {
 		String[] split = documentsById.getFileContentType().split("\\.");
 		String type = split[split.length - 1];
 		Doc2HtmlUtil t = Doc2HtmlUtil.getDoc2HtmlUtilInstance();
-		System.out.println(type);
 		String PDFname = t.file2pdf(stream, toFilePath, type);
 		if (PDFname == null) {
-			HttpUtil.getResponse().getWriter().print("error");
-			return null;
+			String tyUP = type.toUpperCase();
+			boolean equalsImg = OtherUtils.equalsImg(tyUP);
+			if (equalsImg) {
+				File docInputFile = new File(toFilePath + File.separatorChar
+						+ documentsById.getFileContentType());
+				OtherUtils.copyFile(stream,docInputFile);
+				PDFname = documentsById.getFileContentType();
+			} else {
+				HttpUtil.getResponse().getWriter().print("error");
+				return null;
+			}
 		} else if (PDFname.equals("e")) {
 			HttpUtil.getResponse().getWriter().print("e");
 			return null;
@@ -346,7 +353,64 @@ public class DocumentAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String downZipFile() throws Exception {
+
 		return SUCCESS;
+	}
+
+	/**
+	 * 获取教师下的文件审批文件和我的文件
+	 * 
+	 * @return
+	 */
+	public String getMyFile() throws Exception {
+		Users user = (Users) HttpUtil.getSession().getAttribute("suser");
+		String uType = user.getType();
+		List<Documents> documents = new ArrayList<Documents>();
+		if (uType.equals("1")) {
+			Set<Documents> document = userService.getUserById(user.getUserId())
+					.getDocuments();
+			if (document != null && document.size() > 0) {
+				documents.addAll(document);
+			}
+		} else {
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+					"user");
+			Set<Students> students = teacherService.getTeacerById(
+					teachers.getTeaId()).getStudents();
+			for (Students student : students) {
+				Users userByName = userService.getUserByName(student
+						.getStuNum() + "");
+				Set<Documents> documents2 = userByName.getDocuments();
+				if (documents2 != null && documents2.size() > 0) {
+					documents.addAll(documents2);
+				}
+			}
+		}
+		HttpUtil.getRequset().setAttribute("documents", documents);
+		return SUCCESS;
+	}
+
+	/**
+	 * 审批文件
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String checkFile() throws Exception {
+		String docId = HttpUtil.getRequset().getParameter("docId");
+		String message = HttpUtil.getRequset().getParameter("message");
+		if (message == null || message.equals("")) {
+			message = "暂无";
+		}
+		Documents documentsById = service.getDocumentsById(docId);
+		documentsById.setMessage(message);
+		boolean upataDocuments = service.upataDocuments(documentsById);
+		if (upataDocuments) {
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
+		} else {
+			HttpUtil.getResponse().getWriter().print(ERROR);
+		}
+		return null;
 	}
 
 	public DocumentService getService() {
@@ -372,4 +436,13 @@ public class DocumentAction extends ActionSupport {
 	public void setStudentService(StudentService studentService) {
 		this.studentService = studentService;
 	}
+
+	public TeacherService getTeacherService() {
+		return teacherService;
+	}
+
+	public void setTeacherService(TeacherService teacherService) {
+		this.teacherService = teacherService;
+	}
+
 }

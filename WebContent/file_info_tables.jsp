@@ -1,11 +1,10 @@
-<%@page import="com.DMS.ghb.entity.Papers"%>
+<%@page import="com.DMS.ghb.entity.Documents"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <%
-	List<Papers> papers = (List<Papers>)request.getAttribute("papers");
+	List<Documents> documents =(List<Documents>)request.getAttribute("documents");
 %>
 <!DOCTYPE html>
 <html>
@@ -14,6 +13,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 <title>- 数据表格</title>
 <meta name="keywords" content="">
@@ -39,34 +39,43 @@
 			<div class="col-sm-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5>任务</h5>
-						<button type="button" class="btn btn-primary btn-xs"
-							style="float: right; margin-right: 10px;" onclick="ex('${mId }')">导出</button>
-
+						<h5>文件列表</h5>
 					</div>
 					<div class="ibox-content">
 						<table
 							class="table table-striped table-bordered table-hover dataTables-example">
 							<thead>
 								<tr>
-									<th>学号</th>
-									<th>学生姓名</th>
-									<th>论文题目</th>
+									<th>文件名</th>
+									<th>上传时间</th>
+									<th>上传者</th>
+									<th>审批状态</th>
 									<th>审批</th>
+									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="<%=papers%>" var="p">
+								<c:forEach items="<%=documents%>" var="d">
 									<tr class="gradeX">
-										<td>${p.students.stuNum }</td>
-										<td>${p.students.name }</td>
-										<td>${p.name }</td>
-										<td><button type="button" class="btn btn-primary btn-sm" onclick="hege('${p.papersId}')">合格</button>
-											<button type="button" class="btn btn-primary btn-sm" onclick="buhege('${p.papersId}')">不合格</button>
+										<td>${d.fileName }</td>
+										<td>${d.upTime }</td>
+										<td>${d.fileType }</td>
+										<td>${d.message }</td>
+										<td class="center">
+											<button type="button" class="btn btn-primary btn-sm"
+												onclick="hege('${d.docId}')">合格</button>
+											<button type="button" class="btn btn-primary btn-sm"
+												onclick="buhege('${d.docId}')">不合格</button>
 										</td>
+										<td class="center">
+											<button type="button" class="btn btn-primary btn-sm"
+												onclick="downFile('${d.docId}')">下载</button>
+											<button type="button" class="btn btn-primary btn-sm"
+												onclick="showFile('${d.docId}')">查看</button>
+										</td>
+									</tr>
 								</c:forEach>
 							</tbody>
-
 						</table>
 
 					</div>
@@ -88,6 +97,7 @@
 
 	<!-- 自定义js -->
 	<script src="js/content.js?v=1.0.0"></script>
+
 
 	<!-- Page-Level Scripts -->
 	<script>
@@ -124,59 +134,102 @@
 									"New row" ]);
 
 		}
+
 		function init() {
 			var type = $("#usertype").val();
-			if (type == "3") {
-				$('table tr').find('th:eq(3)').remove();
-				$('table tr').find('td:eq(3)').remove();
+			if (type == "1") {
+				$('table tr').find('th:eq(4)').remove();
+				$('table tr').find('td:eq(4)').remove();
 			}
 		}
-		function ex(mId) {
+		function showFile(fileId) {
 			layer.load();
-			var url = "/dms/exportPaper?mId="+mId;
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', url, true); // 也可以使用POST方式，根据接口
-			xhr.responseType = "blob"; // 返回类型blob
-			// 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
-			xhr.onload = function() {
-				// 请求完成
-				$("#bg,.loading").hide();
-				if (this.status === 200) {
-					// 返回200
-					var blob = this.response;
-					var reader = new FileReader();
-					// alert(reader);
-					reader.readAsDataURL(blob); // 转换为base64，可以直接放入a表情href
-					reader.onload = function(e) {
-						// 转换完成，创建一个a标签用于下载
-						var a = document.createElement('a');
-						a.download =getData()+'-学生论文.xls';
-						a.href = e.target.result;
-						$("body").append(a); // 修复firefox中无法触发click
-						a.click();
-						$(a).remove();
-					}
-				}
-				 layer.closeAll('loading');
-			};
-			// 发送ajax请求
-			xhr.send()
-		}
-		function hege(id) {
 			$.ajax({
 				type : "post",
-				url : "/dms/changePMessage",
+				url : "/dms/showFile",
 				data : {
-					cId : id,
-					message : "合格" 
+					docId : fileId
+				},
+				success : function(data, textStatus) {
+					if (data == "error") {
+						layer.msg('暂不支持该格式请下载后查看', {
+							time : 2000,
+							icon : 7,
+						});
+					} else if (data == "e") {
+						layer.msg('服务器错误', {
+							time : 2000,
+							icon : 7,
+						});
+					} else {
+						layer.open({
+							type : 2,
+							title : '预览',
+							shadeClose : true,
+							shade : false,
+							maxmin : true, //开启最大化最小化按钮
+							area : [ '880px', '550px' ],
+							content : data,
+							cancel : function() {
+								$.ajax({
+									type : "post",
+									url : "/dms/deletePDF",
+									data : {
+										req : data
+									}
+								});
+							}
+						});
+					}
+					layer.closeAll("loading");
+				},
+			})
+		}
+		function downFile(fileId) {
+			window.location.href = "downLoadFile?fileId=" + fileId;
+		}
+		function deleteFile(fileId, fileName) {
+			layer.confirm('是否删除？', {
+				icon : 3,
+				btn : [ '是', '否' ]
+			//按钮
+			}, function() {
+				$.ajax({
+					type : "post",
+					url : "/dms/deleteFile",
+					data : {
+						fileName : fileName,
+						fileId : fileId
+					},
+					success : function(data, textStatus) {
+						layer.msg('已删除', {
+							time : 1000,
+							icon : 1,
+							end : function(index, layero) {
+								window.location.reload();
+							}
+						});
+					}
+				})
+			});
+		}
+		function hege(fileId) {
+			$.ajax({
+				type : "post",
+				url : "/dms/checkFile",
+				data : {
+					docId : fileId,
+					message : "合格"
 				},
 				success : function(data, textStatus) {
 					if (data == "success") {
 						layer.msg('已审核', {
 							time : 1000,
 							icon : 1,
+							end : function() {
+								window.location.reload();
+							}
 						});
-
 					} else {
 						layer.msg('服务器错误', {
 							time : 1000,
@@ -184,26 +237,28 @@
 						});
 					}
 				}
-
 			});
 		}
-		function buhege(id) {
+		function buhege(fileId) {
 			layer.prompt({
 				title : '请输入不合格原因',
 				formType : 2
 			}, function(text, index) {
 				$.ajax({
 					type : "post",
-					url : "/dms/changePMessage",
+					url : "/dms/checkFile",
 					data : {
-						cId : id,
-						message : "不合格，原因："+text  
+						docId : fileId,
+						message : "不合格，原因：" + text
 					},
 					success : function(data, textStatus) {
 						if (data == "success") {
 							layer.msg('已审核', {
 								time : 1000,
 								icon : 1,
+								end : function() {
+									window.location.reload();
+								}
 							});
 							layer.close(index);
 						} else {
@@ -212,31 +267,14 @@
 								icon : 7,
 							});
 						}
-						
 					}
-
 				});
 			});
 		}
-		
-		function p(s) {
-		    return s < 10 ? '0' + s: s;
-		}
-		function getData(){
-			var myDate = new Date();
-			//获取当前年
-			var year=myDate.getFullYear();
-			//获取当前月
-			var month=myDate.getMonth()+1;
-			//获取当前日
-			var date=myDate.getDate(); 
-			var h=myDate.getHours();       //获取当前小时数(0-23)
-			var m=myDate.getMinutes();     //获取当前分钟数(0-59)
-			var s=myDate.getSeconds();  
-			var now=year+p(month)+p(date)+p(h)+p(m)+p(s);
-			return now;
-		}
 	</script>
+
+
+
 
 </body>
 

@@ -39,8 +39,8 @@ public class Test {
 //		dao1.saveTeacher(teachers);
 //		students.setTeachers(teachers);
 //		dao.saveStu(students);
-		String i = "wwwwww.wwwww";
-		String[] split = i.split("\\.");
+		String i = "学生文件\\信工学院\\信息工程\\5";
+		String[] split = i.split("\\\\");
 		System.out.println(split.length);
 		for (String string : split) {
 			System.out.println(string);

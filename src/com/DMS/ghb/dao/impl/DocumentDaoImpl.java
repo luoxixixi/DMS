@@ -88,4 +88,15 @@ public class DocumentDaoImpl extends HibernateDaoSupport implements DocumentDao 
 		return null;
 	}
 
+	@Override
+	public boolean upataDocuments(Documents documents) {
+		try {
+			getHibernateTemplate().update(documents);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

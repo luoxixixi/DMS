@@ -74,7 +74,8 @@ public class DocumentServiceImpl implements DocumentService {
 				"/upload");
 		try {
 			is = new FileInputStream(file);
-			File fileTem = new File(root+"\\"+files.getPath(), uuid + files.getFileName());
+			File fileTem = new File(root + "\\" + files.getPath(), uuid
+					+ files.getFileName());
 			if (!fileTem.getParentFile().exists()) {
 				fileTem.getParentFile().mkdirs();
 			}
@@ -86,6 +87,7 @@ public class DocumentServiceImpl implements DocumentService {
 			files.setFileContentType(uuid + files.getFileName());
 			files.setUpTime(TimeUtil.timeNow());
 			files.setFileSize(fileSizeTest.getPrintSize(file.length()));
+			files.setMessage("ÔÝÎÞ");
 			return dao.saveDocument(files);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -111,5 +113,10 @@ public class DocumentServiceImpl implements DocumentService {
 		List<Documents> list = new ArrayList<Documents>();
 		list.add(documentsByName);
 		return list;
+	}
+
+	@Override
+	public boolean upataDocuments(Documents documents) {
+		return dao.upataDocuments(documents);
 	}
 }
