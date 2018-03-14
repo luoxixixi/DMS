@@ -123,6 +123,9 @@
 				<param name="bufferSize">1024</param>
 			</result>
 		</action>
+		<action name="getHis" class="documentAction" method="getHis">
+			<result name="success">his_data_tables.jsp</result>
+		</action>
 		<action name="historyFile" class="documentAction" method="historyFile">
 			<result name="success"></result>
 		</action>

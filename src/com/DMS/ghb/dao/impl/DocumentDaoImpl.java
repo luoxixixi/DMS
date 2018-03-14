@@ -15,7 +15,6 @@ public class DocumentDaoImpl extends HibernateDaoSupport implements DocumentDao 
 		try {
 			getHibernateTemplate().save(documents);
 			return true;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -97,6 +96,21 @@ public class DocumentDaoImpl extends HibernateDaoSupport implements DocumentDao 
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public List<Documents> getHisDoc() {
+		try {
+			String hql = "from Documents where fileStatus='7'";
+			List<Documents> documents = (List<Documents>) getHibernateTemplate()
+					.find(hql);
+			if (documents != null && documents.size() > 0) {
+				return documents;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

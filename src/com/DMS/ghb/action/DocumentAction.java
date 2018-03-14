@@ -2,17 +2,19 @@ package com.DMS.ghb.action;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
-import org.apache.tomcat.jni.User;
 
 import com.DMS.ghb.entity.Documents;
 import com.DMS.ghb.entity.Students;
@@ -26,7 +28,8 @@ import com.DMS.ghb.util.Doc2HtmlUtil;
 import com.DMS.ghb.util.HttpUtil;
 import com.DMS.ghb.util.OtherUtils;
 import com.DMS.ghb.util.PoiTest;
-import com.DMS.ghb.util.ZIPUtil;
+import com.DMS.ghb.util.TimeUtil;
+import com.DMS.ghb.util.ZipUtils;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class DocumentAction extends ActionSupport {
@@ -128,7 +131,8 @@ public class DocumentAction extends ActionSupport {
 					"user");
 			name = students.getName();
 			realName = "学生文件\\" + students.getDepartments() + "\\"
-					+ students.getMajor() + "\\" + students.getClasses();
+					+ students.getMajor() + "\\" + students.getClasses() + "\\"
+					+ students.getStuNum();
 		} else if (type.equals("2")) {
 			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
 					"user");
@@ -229,7 +233,9 @@ public class DocumentAction extends ActionSupport {
 	public String downLoadFile() throws Exception {
 		String fileId = HttpUtil.getRequset().getParameter("fileId");
 		Documents document = service.getDocumentsById(fileId);
-		fileFileName = document.getFileName();
+		String fileName2 = document.getFileName();
+	    fileName2=new String(fileName2.getBytes("UTF-8"),"ISO8859-1");
+		fileFileName = fileName2;
 		String path = document.getPath();
 		String fileName = document.getFileContentType();
 		String root = ServletActionContext.getServletContext().getRealPath(
@@ -267,8 +273,15 @@ public class DocumentAction extends ActionSupport {
 
 	}
 
+	/**
+	 * 查询归档的文件
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public String getHis() throws Exception {
-
+		List<Documents> hisDoc = service.getHisDoc();
+		HttpUtil.getRequset().setAttribute("hisDoc", hisDoc);
 		return SUCCESS;
 	}
 
@@ -282,9 +295,24 @@ public class DocumentAction extends ActionSupport {
 		List<Documents> documents = service.getDocuments();
 		String root = ServletActionContext.getServletContext().getRealPath(
 				"/upload");// 获取真实路径
-		ZIPUtil.creatZIP(documents, root);
+		String file = UUID.randomUUID().toString();
+		String realpath = root + "\\学生文件";
+		String outStr = root + "\\hisZipFile\\" + file + ".zip";
+		OutputStream fos = new FileOutputStream(outStr);
+		ZipUtils.toZip(realpath, fos, true);
+		Documents document = new Documents();
+		document.setFileName(TimeUtil.getTimeNow() + "归档文件.zip");
+		document.setUpTime(TimeUtil.timeNow());
+		document.setPath("hisZipFile");
+		document.setFileContentType(file + ".zip");
+		document.setFileStatus("7");
+		boolean saveDoc = service.saveDoc(document);
+		if (saveDoc) {
+			HttpUtil.getResponse().getWriter().print(SUCCESS);
+		}else {
+			HttpUtil.getResponse().getWriter().print(ERROR);
+		}
 		return null;
-
 	}
 
 	/**
@@ -312,7 +340,7 @@ public class DocumentAction extends ActionSupport {
 			if (equalsImg) {
 				File docInputFile = new File(toFilePath + File.separatorChar
 						+ documentsById.getFileContentType());
-				OtherUtils.copyFile(stream,docInputFile);
+				OtherUtils.copyFile(stream, docInputFile);
 				PDFname = documentsById.getFileContentType();
 			} else {
 				HttpUtil.getResponse().getWriter().print("error");

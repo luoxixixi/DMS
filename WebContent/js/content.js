@@ -97,10 +97,6 @@ $("#addteacher").click(function() {
 	});
 });
 
-$("#hisbutton").click(function() {
-	window.location.href="historyFile";
-	//layer.load();
-});
 $("#buhege").click(function(){
 	layer.open({
   title: '不合格原因'

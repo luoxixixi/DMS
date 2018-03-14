@@ -1,6 +1,11 @@
+<%@page import="java.util.List"%>
+<%@page import="com.DMS.ghb.entity.Documents"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	List<Documents> hisDoc =(List<Documents>) request.getAttribute("hisDoc");
+%>
 <!DOCTYPE html>
 <html>
 
@@ -34,25 +39,28 @@
 
 					<div class="ibox-title">
 						<h5>任务</h5>
-						<button id="hisbutton" type="button"
+						<button type="button"
 							class="btn btn-primary btn-xs"
-							style="float: right; margin-right: 10px;">归档</button>
+							style="float: right; margin-right: 10px;" onclick="his()">归档</button>
 					</div>
 					<div class="ibox-content">
 						<table
 							class="table table-striped table-bordered table-hover dataTables-example">
 							<thead>
 								<tr>
-									<th>年份</th>
+									<th>名称</th>
 									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>2017</td>
-									<td><button type="button" class="btn btn-primary btn-sm">下载</button>
-									</td>
-								</tr>
+								<c:forEach items="<%=hisDoc%>" var="h">
+									<tr>
+										<td>${h.fileName }</td>
+										<td><button type="button" class="btn btn-primary btn-sm"
+										onclick="downLoad('${h.docId}')">下载</button>
+										</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 
@@ -111,7 +119,33 @@
 
 		}
 		function his() {
-
+			var index=layer.load();
+			$.ajax({
+				type : "post",
+				url : "/dms/historyFile",
+				data : {},
+				success : function(data, textStatus) {
+					if (data == "success") {
+						layer.msg('完成', {
+							time : 1000,
+							icon : 1,
+							end :function(){
+								layer.close(index);
+								window.location.href="getHis"
+							}
+						});
+					} else {
+						layer.msg('服务器错误', {
+							time : 1000,
+							icon : 7,
+						});
+						layer.close(index);
+					}
+				}
+			});
+		}
+		function downLoad(fileId) {
+			window.location.href = "downLoadFile?fileId="+fileId;
 		}
 	</script>
 

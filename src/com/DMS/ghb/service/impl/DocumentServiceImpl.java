@@ -119,4 +119,18 @@ public class DocumentServiceImpl implements DocumentService {
 	public boolean upataDocuments(Documents documents) {
 		return dao.upataDocuments(documents);
 	}
+
+	@Override
+	public boolean saveDoc(Documents documents) {
+		return dao.saveDocument(documents);
+	}
+
+	@Override
+	public List<Documents> getHisDoc() {
+		List<Documents> hisDoc = dao.getHisDoc();
+		if (hisDoc==null) {
+			hisDoc = new ArrayList<Documents>();
+		}
+		return hisDoc;
+	}
 }

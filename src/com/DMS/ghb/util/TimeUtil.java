@@ -25,6 +25,16 @@ public class TimeUtil {
 		return timeNow;
 	}
 	/**
+	 * 获得今日日期
+	 * yyyyMMddHHmm
+	 */
+	public static String getTimeNow(){
+		Date date = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+		String timeNow = format.format(date);
+		return timeNow;
+	}
+	/**
 	 * 字符串转成日期
 	 * @param time
 	 * @return

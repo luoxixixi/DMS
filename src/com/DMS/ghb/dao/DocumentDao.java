@@ -13,4 +13,5 @@ public interface DocumentDao {
 	public Documents getDocumentsById(String string);
 	public List<Documents> getDocumentsAll();
 	public List<Documents> getDocumentsByUser(Users users);
+	public List<Documents> getHisDoc();
 }
