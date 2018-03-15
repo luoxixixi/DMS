@@ -130,6 +130,8 @@
 		<property name="service" ref="userServiceImpl" />
 		<property name="teacherService" ref="teacherServiceImpl" />
 		<property name="studentService" ref="studentServiceImpl" />
+		<property name="missionSercive" ref="missionServiceImpl"/>
+		<property name="announcementService" ref="announcementServiceImpl"/>
 	</bean>
 	<bean id="announcementAction" class="com.DMS.ghb.action.AnnouncementAction">
 		<property name="service" ref="announcementServiceImpl"></property>

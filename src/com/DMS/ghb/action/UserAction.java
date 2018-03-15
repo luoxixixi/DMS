@@ -1,6 +1,9 @@
 package com.DMS.ghb.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,20 +15,27 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts2.ServletActionContext;
 import org.apache.tomcat.jni.User;
 
+import com.DMS.ghb.entity.Announcement;
+import com.DMS.ghb.entity.Mission;
 import com.DMS.ghb.entity.Students;
 import com.DMS.ghb.entity.Teachers;
 import com.DMS.ghb.entity.Users;
+import com.DMS.ghb.service.AnnouncementService;
+import com.DMS.ghb.service.MissionSercive;
 import com.DMS.ghb.service.StudentService;
 import com.DMS.ghb.service.TeacherService;
 import com.DMS.ghb.service.UserService;
 import com.DMS.ghb.util.HttpUtil;
 import com.DMS.ghb.util.OtherUtils;
+import com.DMS.ghb.util.TimeUtil;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserAction extends ActionSupport {
 	private UserService service;
 	private StudentService studentService;
 	private TeacherService teacherService;
+	private MissionSercive missionSercive;
+	private AnnouncementService announcementService;
 
 	/**
 	 * 登录
@@ -68,6 +78,18 @@ public class UserAction extends ActionSupport {
 			addActionMessage("请检查用户名或密码是否正确！");
 			return NONE;
 		}
+	}
+
+	/**
+	 * 主页数据
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getIndexData() throws Exception {
+		getMissionByUser();
+		showAnnByUser();
+		return SUCCESS;
 	}
 
 	/**
@@ -349,12 +371,14 @@ public class UserAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String getStu() throws Exception {
-		Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute("user");
-		Set<Students> students = teacherService.getTeacerById(teachers.getTeaId()).getStudents();
-		List<Students> student= null;
-		if(students==null){
+		Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+				"user");
+		Set<Students> students = teacherService.getTeacerById(
+				teachers.getTeaId()).getStudents();
+		List<Students> student = null;
+		if (students == null) {
 			student = new ArrayList<Students>();
-		}else {
+		} else {
 			student = new ArrayList<Students>();
 			System.out.println(students.size());
 			student.addAll(students);
@@ -395,6 +419,107 @@ public class UserAction extends ActionSupport {
 		return SUCCESS;
 	}
 
+	/**
+	 * 查询任务列表
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean getMissionByUser() throws Exception {
+		Users user = (Users) HttpUtil.getSession().getAttribute("suser");
+		List<Mission> missions = new ArrayList<Mission>();
+		if (user.getType().equals("1")) {
+			Students student = (Students) HttpUtil.getSession().getAttribute(
+					"user");
+			Set<Mission> mission = teacherService.getTeacerById(
+					student.getTeachers().getTeaId()).getMissions();
+			missions = missionSercive.getMIssionByUser(student.getTeachers());
+			if (missions == null) {
+				missions = new ArrayList<Mission>();
+			}
+			missions.addAll(mission);
+		} else {
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+					"user");
+			missions = missionSercive.getMIssionByUser(null);
+			if (missions == null) {
+				missions = new ArrayList<Mission>();
+			}
+		}
+		Collections.sort(missions, new Comparator<Mission>() {
+			@Override
+			public int compare(Mission o1, Mission o2) {
+				long l = TimeUtil.getLongTime(o1.getMissionTime())
+						- TimeUtil.getLongTime(o2.getMissionTime());
+				int j = 0;
+				if (l > 0) {
+					j = 1;
+				} else if (l < 0) {
+					j = -1;
+				}
+				return 1;
+			}
+		});
+		if (missions.size() > 10) {
+			missions.subList(0, 9);
+		}
+		HttpUtil.getRequset().setAttribute("missions", missions);
+		return true;
+	}
+
+	/**
+	 * 根据用户查看公告
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+
+	private boolean showAnnByUser() throws Exception {
+		Users user = (Users) HttpUtil.getSession().getAttribute("suser");
+		List<Announcement> announcementByUser = new ArrayList<Announcement>();
+		if (user.getType().equals("3")) {
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+					"user");
+			Set<Announcement> announcements = teacherService.getTeacerById(
+					teachers.getTeaId()).getAnnouncements();
+			announcementByUser.addAll(announcements);
+		} else if (user.getType().equals("2")) {
+			Teachers teachers = (Teachers) HttpUtil.getSession().getAttribute(
+					"user");
+			announcementByUser = announcementService
+					.getAnnouncementByUser(teachers.getTeaId());
+			Set<Announcement> announcements = teacherService.getTeacerById(
+					teachers.getTeaId()).getAnnouncements();
+			announcementByUser.addAll(announcements);
+		} else if (user.getType().equals("1")) {
+			Students student = (Students) HttpUtil.getSession().getAttribute(
+					"user");
+			announcementByUser = announcementService
+					.getAnnouncementByUser(null);
+			Teachers teachers = studentService.getStuById(student.getStuId())
+					.getTeachers();
+			Set<Announcement> announcements = new HashSet<Announcement>();
+			if (teachers != null) {
+				announcements = teachers.getAnnouncements();
+				if (announcements == null) {
+					announcements = new HashSet<Announcement>();
+				}
+			}
+			announcementByUser.addAll(announcements);
+		}
+		Collections.sort(announcementByUser, new Comparator<Announcement>() {
+			@Override
+			public int compare(Announcement o1, Announcement o2) {
+				return o2.getTime().compareTo(o1.getTime());
+			}
+		});
+		if (announcementByUser.size() > 10) {
+			announcementByUser.subList(0, 9);
+		}
+		HttpUtil.getRequset().setAttribute("annList", announcementByUser);
+		return true;
+	}
+
 	public StudentService getStudentService() {
 		return studentService;
 	}
@@ -417,6 +542,22 @@ public class UserAction extends ActionSupport {
 
 	public void setService(UserService service) {
 		this.service = service;
+	}
+
+	public MissionSercive getMissionSercive() {
+		return missionSercive;
+	}
+
+	public void setMissionSercive(MissionSercive missionSercive) {
+		this.missionSercive = missionSercive;
+	}
+
+	public AnnouncementService getAnnouncementService() {
+		return announcementService;
+	}
+
+	public void setAnnouncementService(AnnouncementService announcementService) {
+		this.announcementService = announcementService;
 	}
 
 }

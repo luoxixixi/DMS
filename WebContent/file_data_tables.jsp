@@ -63,8 +63,10 @@
 											<button type="button"
 												class="btn btn-primary btn-sm"
 												onclick="showFile('${d.docId}')">查看</button>
+											<c:if test="${d.userId.userId==suser.userId }">
 											<button type="button" class="btn btn-primary btn-sm"
 												onclick="deleteFile('${d.docId}', '${d.fileContentType}')">删除</button>
+										     </c:if>
 										</td>
 									</tr>
 								</c:forEach>

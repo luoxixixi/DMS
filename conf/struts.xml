@@ -19,6 +19,9 @@
 			<result name="MANAGE">/s.jsp</result>
 			<result name="none">/</result>
 		</action>
+		<action name="getIndexData" class="userAction" method="getIndexData">
+			<result name="success">manager_v1.jsp</result>
+		</action>
 		<action name="importStu" class="documentAction" method="importStu">
 			<result name="success"></result>
 		</action>
